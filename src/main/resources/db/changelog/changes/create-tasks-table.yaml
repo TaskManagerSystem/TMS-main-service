@@ -4,7 +4,7 @@ databaseChangeLog:
       author: Dmytro.Hadiuchko
       changes:
         - createTable:
-            tableName: task
+            tableName: tasks
             columns:
               - column:
                   name: id
