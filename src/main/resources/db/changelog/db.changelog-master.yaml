@@ -7,3 +7,5 @@ databaseChangeLog:
       file: db/changelog/changes/create-projects-table.yaml
   - include:
       file: db/changelog/changes/create-tasks-table.yaml
+  - include:
+      file: db/changelog/changes/create-comments-table.yaml

@@ -1,0 +1,33 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-comments-table
+      author: Oleksandr.Farion
+      changes:
+        - createTable:
+            tableName: comments
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: task_id
+                  type: bigint
+                  constraints:
+                    foreignKeyName: fk_comment_task
+                    references: tasks(id)
+              - column:
+                  name: user_id
+                  type: bigint
+                  constraints:
+                    foreignKeyName: fk_comment_user
+                    references: users(id)
+              - column:
+                  name: text
+                  type: varchar(255)
+              - column:
+                  name: order_date
+                  type: datetime
+                  defaultValueComputed: CURRENT_TIMESTAMP
