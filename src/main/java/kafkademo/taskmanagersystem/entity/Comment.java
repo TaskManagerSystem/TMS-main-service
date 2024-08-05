@@ -16,9 +16,9 @@ import java.time.LocalDateTime;
 @Setter
 public class Comment {
     @ManyToOne(fetch = FetchType.LAZY)
-    private Long taskId;
+    private Task task;
     @ManyToOne(fetch = FetchType.LAZY)
-    private Long userId;
+    private User user;
     private String text;
     @CreationTimestamp
     private LocalDateTime timestamp;
