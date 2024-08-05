@@ -3,3 +3,5 @@ databaseChangeLog:
       file: db/changelog/changes/create-users-table.yaml
   - include:
       file: db/changelog/changes/create-labels-table.yaml
+  - include:
+      file: db/changelog/changes/create-projects-table.yaml
