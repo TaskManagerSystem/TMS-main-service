@@ -20,5 +20,5 @@ public class Label {
     @Column(nullable = false)
     private String name;
     @Column(nullable = false)
-    private String Color;
+    private String color;
 }
