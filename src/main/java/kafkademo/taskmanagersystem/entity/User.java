@@ -24,6 +24,6 @@ public class User {
     private String email;
     private String firstName;
     private String lastName;
-    @Column(name = "is_deleted")
+    @Column(name = "is_deleted", columnDefinition = "TINYINT(1)")
     private boolean isDeleted;
 }
