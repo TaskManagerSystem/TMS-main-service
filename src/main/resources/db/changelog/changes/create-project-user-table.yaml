@@ -1,0 +1,33 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-project-user-table
+      author: Dmytro.Hadiuchko
+      changes:
+        - createTable:
+            tableName: project_user
+            columns:
+              - column:
+                  name: project_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: user_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+        - addPrimaryKey:
+            tableName: project_user
+            columnNames: project_id, user_id
+        - addForeignKeyConstraint:
+            baseTableName: project_user
+            baseColumnNames: project_id
+            constraintName: fk_project_user_project
+            referencedTableName: projects
+            referencedColumnNames: id
+        - addForeignKeyConstraint:
+            baseTableName: project_user
+            baseColumnNames: user_id
+            constraintName: fk_project_user_user
+            referencedTableName: users
+            referencedColumnNames: id

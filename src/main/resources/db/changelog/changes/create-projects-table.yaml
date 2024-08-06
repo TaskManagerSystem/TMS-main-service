@@ -35,3 +35,16 @@ databaseChangeLog:
                   type: VARCHAR(20)
                   constraints:
                     nullable: false
+              - column:
+                  name: user_id
+                  type: BIGINT
+  - changeSet:
+      id: create-project-user-foreign-key
+      author: Dmytro.Hadiuchko
+      changes:
+        - addForeignKeyConstraint:
+            baseTableName: projects
+            baseColumnNames: user_id
+            constraintName: fk_project_user
+            referencedTableName: users
+            referencedColumnNames: id
