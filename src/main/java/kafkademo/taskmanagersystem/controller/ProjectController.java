@@ -46,7 +46,7 @@ public class ProjectController {
     @Operation(summary = "Get all projects by user",
             description = "Get a list of all project by user")
     public List<ProjectDto> findAllByUser() {
-      //TODO:  return projectService.getByUser();
+        //TODO:  return projectService.getByUser();
         return null;
     }
 
