@@ -1,14 +1,14 @@
 package kafkademo.taskmanagersystem.dto.user.request;
 
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
 @Data
 public class UpdateUserRequestDto {
-    @NotNull
+    @NotBlank
     private String userName;
-    @NotNull
+    @NotBlank
     private String userFirstName;
-    @NotNull
+    @NotBlank
     private String userLastName;
 }
