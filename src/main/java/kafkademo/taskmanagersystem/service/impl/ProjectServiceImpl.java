@@ -27,7 +27,8 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public List<ProjectDto> getByUser(Long userId) {
-        return projectRepository.findByUserId();
+        return null;
+        //TODO: add method for repo
     }
 
     @Override
