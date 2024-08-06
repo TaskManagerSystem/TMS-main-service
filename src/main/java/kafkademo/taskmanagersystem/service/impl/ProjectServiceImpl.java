@@ -33,14 +33,12 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public ProjectDto getById(Long id) {
-        return projectMapper.toDto(projectRepository.findById(id).orElseThrow(() ->
-                new EntityNotFoundException("Can't find project with id " + id)));
+        return projectMapper.toDto(getProjectById(id));
     }
 
     @Override
     public ProjectDto updateById(Long id, CreateProjectDto createProjectDto) {
-        Project project = projectRepository.findById(id).orElseThrow(() ->
-                new EntityNotFoundException("Can't find project with id " + id));
+        Project project = getProjectById(id);
         project.setName(createProjectDto.getName());
         project.setDescription(createProjectDto.getDescription());
         project.setStartDate(createProjectDto.getStartDate());
@@ -51,5 +49,10 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public void deleteById(Long id) {
         projectRepository.deleteById(id);
+    }
+
+    private Project getProjectById(Long id) {
+        return projectRepository.findById(id).orElseThrow(() ->
+                new EntityNotFoundException("Can't find project with id " + id));
     }
 }
