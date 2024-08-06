@@ -20,7 +20,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public ResponseUserDto updateUserRole(UpdateUserRoleDto updateDto, Long userId) {
         User user = findUserProfile(userId);
-//        user.setRole(updateDto.getRole); // ЦЕ ДОПИШУ ПІСЛЯ ДОДАВАННЯ РЕГІСТРАЦІЇ ТА АУТЕНТИФІКАЦІЇ
+        // TODO: add updating to user role
         return userMapper.toDto(userRepository.save(user));
     }
 
