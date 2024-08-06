@@ -12,7 +12,7 @@ public interface ProjectService {
 
     ProjectDto getById(Long id);
 
-    ProjectDto updateById(Long id);
+    ProjectDto updateById(Long id, CreateProjectDto createProjectDto);
 
-    ProjectDto deleteById(Long id);
+    void deleteById(Long id);
 }
