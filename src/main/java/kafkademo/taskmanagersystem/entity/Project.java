@@ -40,7 +40,7 @@ public class Project {
     )
     private Set<User> users;
 
-    enum Status {
+    public enum Status {
         INITIATED,
         IN_PROGRESS,
         COMPLETED
