@@ -29,19 +29,22 @@ public class ProjectController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    @Operation(summary = "Create a new project", description = "Create a new project")
+    @Operation(summary = "Create a new project",
+            description = "Create a new project")
     public ProjectDto create(@RequestBody @Valid CreateProjectDto createProjectDto) {
         return projectService.create(createProjectDto);
     }
 
     @GetMapping("/{id}")
-    @Operation(summary = "Get project by id", description = "Get project by specific id")
+    @Operation(summary = "Get project by id",
+            description = "Get project by specific id")
     public ProjectDto findById(@PathVariable Long id) {
         return projectService.getById(id);
     }
 
     @GetMapping
-    @Operation(summary = "Get all projects by user", description = "Get a list of all project by user")
+    @Operation(summary = "Get all projects by user",
+            description = "Get a list of all project by user")
     public List<ProjectDto> findAllByUser() {
       //TODO:  return projectService.getByUser();
         return null;
@@ -49,13 +52,15 @@ public class ProjectController {
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @Operation(summary = "Delete project by id", description = "Delete project by specific id")
+    @Operation(summary = "Delete project by id",
+            description = "Delete project by specific id")
     public void delete(@PathVariable Long id) {
         projectService.deleteById(id);
     }
 
     @PutMapping("/{id}")
-    @Operation(summary = "Update project by id", description = "Update project by specific id")
+    @Operation(summary = "Update project by id",
+            description = "Update project by specific id")
     public ProjectDto updateById(
             @PathVariable Long id, @RequestBody @Valid UpdateProjectDto updateProjectDto) {
         return projectService.updateById(id, updateProjectDto);
