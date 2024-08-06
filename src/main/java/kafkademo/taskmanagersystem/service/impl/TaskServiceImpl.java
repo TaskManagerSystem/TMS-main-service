@@ -1,6 +1,7 @@
 package kafkademo.taskmanagersystem.service.impl;
 
 import jakarta.persistence.EntityNotFoundException;
+import java.util.List;
 import kafkademo.taskmanagersystem.dto.task.CreateTaskDto;
 import kafkademo.taskmanagersystem.dto.task.TaskDto;
 import kafkademo.taskmanagersystem.dto.task.UpdateTaskDto;
@@ -28,6 +29,11 @@ public class TaskServiceImpl implements TaskService {
                  new EntityNotFoundException("Can't find project with id " + createTaskDto.getProjectId())));
         // TODO: remake
         return taskMapper.toDto(taskRepository.save(task));
+    }
+
+    @Override
+    public List<TaskDto> getAllByProjectId(Long projectId) {
+        return taskRepository.findAllByProjectId(projectId);
     }
 
     @Override
