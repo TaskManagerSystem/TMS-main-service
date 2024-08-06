@@ -4,7 +4,7 @@ databaseChangeLog:
       author: Dmytro.Hadiuchko
       changes:
         - createTable:
-            tableName: project_user
+            tableName: projects_users
             columns:
               - column:
                   name: project_id
@@ -17,16 +17,16 @@ databaseChangeLog:
                   constraints:
                     nullable: false
         - addPrimaryKey:
-            tableName: project_user
+            tableName: projects_users
             columnNames: project_id, user_id
         - addForeignKeyConstraint:
-            baseTableName: project_user
+            baseTableName: projects_users
             baseColumnNames: project_id
             constraintName: fk_project_user_project
             referencedTableName: projects
             referencedColumnNames: id
         - addForeignKeyConstraint:
-            baseTableName: project_user
+            baseTableName: projects_users
             baseColumnNames: user_id
             constraintName: fk_project_user_user
             referencedTableName: users
