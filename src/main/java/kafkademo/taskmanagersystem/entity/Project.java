@@ -7,8 +7,12 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import java.time.LocalDate;
+import java.util.Set;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -28,6 +32,13 @@ public class Project {
     private LocalDate endDate;
     @Enumerated(EnumType.STRING)
     private Status status;
+    @ManyToMany
+    @JoinTable(
+            name = "projects_users",
+            joinColumns = @JoinColumn(name = "project_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id")
+    )
+    private Set<User> users;
 
     enum Status {
         INITIATED,

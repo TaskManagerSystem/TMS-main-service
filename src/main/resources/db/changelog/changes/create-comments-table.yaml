@@ -28,6 +28,6 @@ databaseChangeLog:
                   name: text
                   type: varchar(255)
               - column:
-                  name: order_date
+                  name: timestamp
                   type: datetime
                   defaultValueComputed: CURRENT_TIMESTAMP
