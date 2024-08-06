@@ -31,12 +31,12 @@ public class Task {
     private LocalDate dueDate;
     @ManyToOne
     @JoinColumn(name = "project_id")
-    private Project projectId;
+    private Project project;
     @ManyToOne
     @JoinColumn(name = "user_id")
-    private User userId;
+    private User user;
 
-    enum Priority {
+    public enum Priority {
         LOW,
         MEDIUM,
         HIGH
