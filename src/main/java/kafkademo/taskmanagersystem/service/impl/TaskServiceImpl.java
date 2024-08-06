@@ -26,7 +26,8 @@ public class TaskServiceImpl implements TaskService {
     public TaskDto create(CreateTaskDto createTaskDto) {
         Task task = taskMapper.toModel(createTaskDto);
         task.setProject(projectRepository.findById(createTaskDto.getProjectId()).orElseThrow(() ->
-                 new EntityNotFoundException("Can't find project with id " + createTaskDto.getProjectId())));
+                new EntityNotFoundException("Can't find project with id "
+                        + createTaskDto.getProjectId())));
         // TODO: remake
         return taskMapper.toDto(taskRepository.save(task));
     }
