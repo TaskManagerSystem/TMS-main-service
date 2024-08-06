@@ -13,7 +13,7 @@ public interface TaskMapper {
     @Mapping(source = "project.id", target = "projectId")
     TaskDto toDto(Task task);
 
-    @Mapping(target = "projectId", ignore = true)
-    @Mapping(target = "userId", ignore = true)
+    @Mapping(target = "project", ignore = true)
+    @Mapping(target = "user", ignore = true)
     Task toModel(CreateTaskDto createTaskDto);
 }
