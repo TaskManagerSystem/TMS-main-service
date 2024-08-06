@@ -1,10 +1,13 @@
 package kafkademo.taskmanagersystem.service.impl;
 
 import jakarta.persistence.EntityNotFoundException;
+import java.util.Arrays;
 import java.util.List;
 import kafkademo.taskmanagersystem.dto.project.CreateProjectDto;
 import kafkademo.taskmanagersystem.dto.project.ProjectDto;
+import kafkademo.taskmanagersystem.dto.project.UpdateProjectDto;
 import kafkademo.taskmanagersystem.entity.Project;
+import kafkademo.taskmanagersystem.exception.InvalidStatusException;
 import kafkademo.taskmanagersystem.mapper.ProjectMapper;
 import kafkademo.taskmanagersystem.repo.ProjectRepository;
 import kafkademo.taskmanagersystem.service.ProjectService;
@@ -37,12 +40,14 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public ProjectDto updateById(Long id, CreateProjectDto createProjectDto) {
+    public ProjectDto updateById(Long id, UpdateProjectDto updateProjectDto) {
         Project project = getProjectById(id);
-        project.setName(createProjectDto.getName());
-        project.setDescription(createProjectDto.getDescription());
-        project.setStartDate(createProjectDto.getStartDate());
-        project.setEndDate(createProjectDto.getEndDate());
+        project.setName(updateProjectDto.getName());
+        project.setDescription(updateProjectDto.getDescription());
+        project.setStartDate(updateProjectDto.getStartDate());
+        project.setEndDate(updateProjectDto.getEndDate());
+        Project.Status status = toStatusIfValid(updateProjectDto.getStatus());
+        project.setStatus(status);
         return projectMapper.toDto(projectRepository.save(project));
     }
 
@@ -54,5 +59,15 @@ public class ProjectServiceImpl implements ProjectService {
     private Project getProjectById(Long id) {
         return projectRepository.findById(id).orElseThrow(() ->
                 new EntityNotFoundException("Can't find project with id " + id));
+    }
+
+    private Project.Status toStatusIfValid(String requestStatus) {
+        return Arrays.stream(Project.Status.values())
+                .filter(status -> status.name().equals(requestStatus))
+                .findFirst()
+                .orElseThrow(
+                        () -> new InvalidStatusException("Status " + requestStatus
+                                + " doesn't exist")
+                );
     }
 }
