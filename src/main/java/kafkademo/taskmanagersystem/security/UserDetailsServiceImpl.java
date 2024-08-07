@@ -1,5 +1,6 @@
 package kafkademo.taskmanagersystem.security;
 
+import jakarta.persistence.EntityNotFoundException;
 import kafkademo.taskmanagersystem.repo.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,6 +17,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         return userRepository.findUserByEmail(email)
                 .orElseThrow(
-                        () -> new UsernameNotFoundException("Can't find user by email: " + email));
+                        () -> new EntityNotFoundException("Can't find user by email: " + email));
     }
 }
