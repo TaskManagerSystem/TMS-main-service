@@ -47,7 +47,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public ResponseUserDto updateUserProfile(UpdateUserRequestDto updateDto, Long userId) {
         User user = findUserProfile(userId);
-        user.setUserName(updateDto.getUserName());
+        user.setNickName(updateDto.getNickName());
         user.setFirstName(updateDto.getUserFirstName());
         user.setLastName(updateDto.getUserLastName());
         return userMapper.toDto(userRepository.save(user));

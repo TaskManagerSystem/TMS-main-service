@@ -11,8 +11,9 @@ import lombok.Data;
         fieldMatch = "repeatPassword",
         message = "Password and repeatPassword should be the same!")
 public class RegisterUserRequestDto {
-    @NotBlank(message = "Username cannot be blank")
-    private String userName;
+
+    @NotBlank(message = "nickName cannot be blank")
+    private String nickName;
 
     @NotBlank(message = "Password cannot be blank")
     @Size(min = 8, max = 16)

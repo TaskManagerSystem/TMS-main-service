@@ -6,7 +6,7 @@ import lombok.Data;
 @Data
 public class UpdateUserRequestDto {
     @NotBlank
-    private String userName;
+    private String nickName;
     @NotBlank
     private String userFirstName;
     @NotBlank
