@@ -2,11 +2,9 @@ package kafkademo.taskmanagersystem.validation.impl;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
-import kafkademo.taskmanagersystem.dto.user.request.RegisterUserRequestDto;
+import java.util.Objects;
 import kafkademo.taskmanagersystem.validation.FieldMatch;
 import org.springframework.beans.BeanWrapperImpl;
-
-import java.util.Objects;
 
 public class FieldMatchValidator implements ConstraintValidator<FieldMatch, Object> {
 
