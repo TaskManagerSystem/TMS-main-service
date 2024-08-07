@@ -2,6 +2,7 @@ package kafkademo.taskmanagersystem.dto.user.request;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import kafkademo.taskmanagersystem.validation.FieldMatch;
 import lombok.Data;
 
@@ -14,9 +15,10 @@ public class RegisterUserRequestDto {
     private String userName;
 
     @NotBlank(message = "Password cannot be blank")
+    @Size(min = 8, max = 16)
     private String password;
 
-    @NotBlank(message = "Repeat password cannot be blank")
+    @NotBlank(message = "Repeated password cannot be blank")
     private String repeatPassword;
 
     @Email(message = "Email should be valid")
