@@ -18,7 +18,7 @@ public class RegisterUserRequestDto {
     @Size(min = 8, max = 16)
     private String password;
 
-    @NotBlank(message = "Repeated password cannot be blank")
+    @NotBlank(message = "Repeat password cannot be blank")
     private String repeatPassword;
 
     @Email(message = "Email should be valid")
