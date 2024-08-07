@@ -1,5 +1,6 @@
 package kafkademo.taskmanagersystem.controller;
 
+import jakarta.validation.Valid;
 import kafkademo.taskmanagersystem.dto.user.request.RegisterUserRequestDto;
 import kafkademo.taskmanagersystem.dto.user.response.ResponseUserDto;
 import kafkademo.taskmanagersystem.service.UserService;
@@ -16,7 +17,7 @@ public class AuthController {
     private final UserService userService;
 
     @PostMapping("/registration")
-    public ResponseUserDto register(@RequestBody RegisterUserRequestDto requestDto) {
+    public ResponseUserDto register(@Valid @RequestBody RegisterUserRequestDto requestDto) {
         return userService.register(requestDto);
     }
 
