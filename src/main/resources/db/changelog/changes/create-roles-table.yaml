@@ -13,7 +13,7 @@ databaseChangeLog:
                   constraints:
                     primaryKey: true
               - column:
-                  name: role
+                  name: role_name
                   type: enum('USER', 'ADMIN')
                   constraints:
                     nullable: false
