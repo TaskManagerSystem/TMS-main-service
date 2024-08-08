@@ -1,6 +1,7 @@
 package kafkademo.taskmanagersystem.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import java.util.List;
 import kafkademo.taskmanagersystem.dto.label.CreateLabelRequestDto;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/labels")
 @RequiredArgsConstructor
+@Tag(name = "Label management", description = "Endpoints for managing labels")
 public class LabelController {
     private final LabelService labelService;
 
