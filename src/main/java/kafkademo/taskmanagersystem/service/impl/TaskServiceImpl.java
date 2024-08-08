@@ -43,8 +43,9 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public TaskDto deleteById(Long id) {
-        return null;
+    public void deleteById(Long id) {
+        taskRepository.deleteById(id);
+        //TODO: Can delete only tasks in your project
     }
 
     @Override

@@ -27,7 +27,7 @@ public class TaskController {
     private final TaskService taskService;
 
     @PostMapping
-    @Operation(summary = "", description = "")
+    @Operation(summary = "Create task", description = "Create a new task")
     public TaskDto create(CreateTaskDto createTaskDto) {
         return taskService.create(createTaskDto);
     }
