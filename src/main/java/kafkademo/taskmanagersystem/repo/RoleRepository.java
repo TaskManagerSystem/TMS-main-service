@@ -1,9 +1,9 @@
 package kafkademo.taskmanagersystem.repo;
 
-import java.util.Set;
+import java.util.Optional;
 import kafkademo.taskmanagersystem.entity.Role;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface RoleRepository extends JpaRepository<Role, Long> {
-    Set<Role> findAllByRoleName(Role.RoleName roleName);
+    Optional<Role> findAllByRoleName(Role.RoleName roleName);
 }

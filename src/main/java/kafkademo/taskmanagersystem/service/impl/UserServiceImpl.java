@@ -1,6 +1,7 @@
 package kafkademo.taskmanagersystem.service.impl;
 
 import jakarta.persistence.EntityNotFoundException;
+import java.util.Collections;
 import kafkademo.taskmanagersystem.dto.user.request.RegisterUserRequestDto;
 import kafkademo.taskmanagersystem.dto.user.request.UpdateUserRequestDto;
 import kafkademo.taskmanagersystem.dto.user.request.UpdateUserRoleDto;
@@ -32,7 +33,11 @@ public class UserServiceImpl implements UserService {
         }
         User user = userMapper.toEntity(requestDto);
         user.setPassword(passwordEncoder.encode(requestDto.getPassword()));
-        user.setRoles(roleRepository.findAllByRoleName(Role.RoleName.USER));
+        Role role = (Role) roleRepository.findAllByRoleName(Role.RoleName.USER)
+                .orElseThrow(
+                        () -> new EntityNotFoundException("Can not find role by name: "
+                                + Role.RoleName.USER));
+        user.setRoles(Collections.singleton(role));
         User savedUser = userRepository.save(user);
         return userMapper.toDto(savedUser);
     }
@@ -40,7 +45,12 @@ public class UserServiceImpl implements UserService {
     @Override
     public ResponseUserDto updateUserRole(UpdateUserRoleDto updateDto, Long userId) {
         User user = findUserProfile(userId);
-        // TODO: add updating to user role
+
+        Role role = roleRepository.findAllByRoleName(Role.RoleName.valueOf(updateDto.getRole()))
+                .orElseThrow(
+                        () -> new EntityNotFoundException("Can not find role by role name: "
+                                + updateDto.getRole()));
+        user.setRoles(Collections.singleton(role));
         return userMapper.toDto(userRepository.save(user));
     }
 
