@@ -3,7 +3,6 @@ package kafkademo.taskmanagersystem.service.impl;
 import jakarta.persistence.EntityNotFoundException;
 import java.util.Collections;
 import java.util.Set;
-
 import kafkademo.taskmanagersystem.dto.user.request.RegisterUserRequestDto;
 import kafkademo.taskmanagersystem.dto.user.request.UpdateUserRequestDto;
 import kafkademo.taskmanagersystem.dto.user.request.UpdateUserRoleDto;

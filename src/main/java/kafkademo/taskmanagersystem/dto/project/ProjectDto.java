@@ -1,9 +1,8 @@
 package kafkademo.taskmanagersystem.dto.project;
 
-import lombok.Data;
-
 import java.time.LocalDate;
 import java.util.Set;
+import lombok.Data;
 
 @Data
 public class ProjectDto {

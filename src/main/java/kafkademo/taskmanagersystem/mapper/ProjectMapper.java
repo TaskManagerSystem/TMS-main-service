@@ -1,5 +1,7 @@
 package kafkademo.taskmanagersystem.mapper;
 
+import java.util.Set;
+import java.util.stream.Collectors;
 import kafkademo.taskmanagersystem.config.MapperConfig;
 import kafkademo.taskmanagersystem.dto.project.CreateProjectDto;
 import kafkademo.taskmanagersystem.dto.project.ProjectDto;
@@ -9,9 +11,6 @@ import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
-
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @Mapper(config = MapperConfig.class)
 public interface ProjectMapper {

@@ -5,7 +5,6 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
 import kafkademo.taskmanagersystem.dto.project.CreateProjectDto;
 import kafkademo.taskmanagersystem.dto.project.ProjectDto;
 import kafkademo.taskmanagersystem.dto.project.UpdateProjectDto;
@@ -82,7 +81,8 @@ public class ProjectServiceImpl implements ProjectService {
 
     private void isUserInProject(User user, Project project) {
         if (project.getUsers().stream().noneMatch(u -> u.getId().equals(user.getId()))) {
-            throw new UserNotInProjectException("Access to project with id " + project.getId() + " is forbidden.");
+            throw new UserNotInProjectException("Access to project with id "
+                    + project.getId() + " is forbidden.");
         }
     }
 
