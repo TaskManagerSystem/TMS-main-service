@@ -10,4 +10,5 @@ public class CreateTaskDto {
     private String status;
     private LocalDate dueDate;
     private Long projectId;
+    private Long assigneeId;
 }

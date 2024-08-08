@@ -4,15 +4,16 @@ import java.util.List;
 import kafkademo.taskmanagersystem.dto.task.CreateTaskDto;
 import kafkademo.taskmanagersystem.dto.task.TaskDto;
 import kafkademo.taskmanagersystem.dto.task.UpdateTaskDto;
+import kafkademo.taskmanagersystem.entity.User;
 
 public interface TaskService {
-    TaskDto create(CreateTaskDto createTaskDto);
+    TaskDto create(User user, CreateTaskDto createTaskDto);
 
     List<TaskDto> getAllByProjectId(Long projectId);
 
-    TaskDto getById(Long id);
+    TaskDto getById(User user, Long id);
 
-    void deleteById(Long id);
+    void deleteById(User user, Long id);
 
-    TaskDto updateById(Long id, UpdateTaskDto updateTaskDto);
+    TaskDto updateById(User user, Long id, UpdateTaskDto updateTaskDto);
 }
