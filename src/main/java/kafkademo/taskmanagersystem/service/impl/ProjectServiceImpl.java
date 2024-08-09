@@ -1,7 +1,6 @@
 package kafkademo.taskmanagersystem.service.impl;
 
 import jakarta.persistence.EntityNotFoundException;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -17,6 +16,7 @@ import kafkademo.taskmanagersystem.mapper.ProjectMapper;
 import kafkademo.taskmanagersystem.repo.ProjectRepository;
 import kafkademo.taskmanagersystem.service.ProjectService;
 import kafkademo.taskmanagersystem.service.UserService;
+import kafkademo.taskmanagersystem.validation.EnumValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -62,7 +62,7 @@ public class ProjectServiceImpl implements ProjectService {
         project.setDescription(updateProjectDto.getDescription());
         project.setStartDate(updateProjectDto.getStartDate());
         project.setEndDate(updateProjectDto.getEndDate());
-        Project.Status status = toStatusIfValid(updateProjectDto.getStatus());
+        Project.Status status = getStatusIfValid(updateProjectDto.getStatus());
         project.setStatus(status);
         return projectMapper.toDto(projectRepository.save(project));
     }
@@ -80,15 +80,10 @@ public class ProjectServiceImpl implements ProjectService {
         return project;
     }
 
-    @Override
-    public Project.Status toStatusIfValid(String requestStatus) {
-        return Arrays.stream(Project.Status.values())
-                .filter(status -> status.name().equals(requestStatus))
-                .findFirst()
-                .orElseThrow(
-                        () -> new InvalidConstantException("Status " + requestStatus
-                                + " doesn't exist")
-                );
+    private Project.Status getStatusIfValid(String requestStatus) {
+        return EnumValidator.findConstantIfValid(Project.Status.class, requestStatus)
+                .orElseThrow(() -> new InvalidConstantException("Status " + requestStatus
+                + " doesn't exist"));
     }
 
     private void isUserInProject(User user, Project project) {

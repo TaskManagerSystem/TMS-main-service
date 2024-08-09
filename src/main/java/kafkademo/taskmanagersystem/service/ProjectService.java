@@ -20,6 +20,4 @@ public interface ProjectService {
     void deleteById(User user, Long id);
 
     Project getProjectById(User user, Long id);
-
-    Project.Status toStatusIfValid(String requestStatus);
 }
