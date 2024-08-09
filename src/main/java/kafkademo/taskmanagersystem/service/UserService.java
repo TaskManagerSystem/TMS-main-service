@@ -1,5 +1,6 @@
 package kafkademo.taskmanagersystem.service;
 
+import java.util.Set;
 import kafkademo.taskmanagersystem.dto.user.request.RegisterUserRequestDto;
 import kafkademo.taskmanagersystem.dto.user.request.UpdateUserRequestDto;
 import kafkademo.taskmanagersystem.dto.user.request.UpdateUserRoleDto;
@@ -14,4 +15,6 @@ public interface UserService {
     ResponseUserDto updateUserProfile(UpdateUserRequestDto updateDto, Long userId);
 
     ResponseUserDto getUserProfile(Long userId);
+
+    Set<Long> getAllUserIds();
 }

@@ -49,9 +49,12 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
         return getDefaultTemplate(e, HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler(RegistrationException.class)
-    public ResponseEntity<Object> handleRegistrationException(
-            RegistrationException e) {
+    @ExceptionHandler({
+            RegistrationException.class,
+            UserNotInProjectException.class,
+            InvalidUserIdsException.class})
+    public ResponseEntity<Object> handleBadRequestException(
+            Exception e) {
         return getDefaultTemplate(e, HttpStatus.BAD_REQUEST);
     }
 

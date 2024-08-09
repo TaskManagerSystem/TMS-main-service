@@ -2,6 +2,7 @@ package kafkademo.taskmanagersystem.service.impl;
 
 import jakarta.persistence.EntityNotFoundException;
 import java.util.Collections;
+import java.util.Set;
 import kafkademo.taskmanagersystem.dto.user.request.RegisterUserRequestDto;
 import kafkademo.taskmanagersystem.dto.user.request.UpdateUserRequestDto;
 import kafkademo.taskmanagersystem.dto.user.request.UpdateUserRoleDto;
@@ -67,6 +68,11 @@ public class UserServiceImpl implements UserService {
     public ResponseUserDto getUserProfile(Long userId) {
         User user = findUserProfile(userId);
         return userMapper.toDto(user);
+    }
+
+    @Override
+    public Set<Long> getAllUserIds() {
+        return userRepository.findAllIds();
     }
 
     private User findUserProfile(Long userId) {

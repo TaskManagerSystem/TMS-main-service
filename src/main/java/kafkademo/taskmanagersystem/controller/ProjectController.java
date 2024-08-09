@@ -7,9 +7,12 @@ import java.util.List;
 import kafkademo.taskmanagersystem.dto.project.CreateProjectDto;
 import kafkademo.taskmanagersystem.dto.project.ProjectDto;
 import kafkademo.taskmanagersystem.dto.project.UpdateProjectDto;
+import kafkademo.taskmanagersystem.entity.User;
 import kafkademo.taskmanagersystem.service.ProjectService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -31,38 +34,44 @@ public class ProjectController {
     @ResponseStatus(HttpStatus.CREATED)
     @Operation(summary = "Create a new project",
             description = "Create a new project")
-    public ProjectDto create(@RequestBody @Valid CreateProjectDto createProjectDto) {
-        return projectService.create(createProjectDto);
+    @PreAuthorize("hasRole('ADMIN')")
+    public ProjectDto create(@AuthenticationPrincipal User user,
+                             @RequestBody @Valid CreateProjectDto createProjectDto) {
+        return projectService.create(user, createProjectDto);
     }
 
     @GetMapping("/{id}")
     @Operation(summary = "Get project by id",
             description = "Get project by specific id")
-    public ProjectDto findById(@PathVariable Long id) {
-        return projectService.getById(id);
+    @PreAuthorize("hasAnyRole('ADMIN','USER')")
+    public ProjectDto findById(@AuthenticationPrincipal User user, @PathVariable Long id) {
+        return projectService.getById(user, id);
     }
 
     @GetMapping
     @Operation(summary = "Get all projects by user",
             description = "Get a list of all project by user")
-    public List<ProjectDto> findAllByUser() {
-        //TODO:  return projectService.getByUser();
-        return null;
+    @PreAuthorize("hasRole('ADMIN')")
+    public List<ProjectDto> findAllByUser(@AuthenticationPrincipal User user) {
+        return projectService.getByUser(user);
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @Operation(summary = "Delete project by id",
             description = "Delete project by specific id")
-    public void delete(@PathVariable Long id) {
-        projectService.deleteById(id);
+    @PreAuthorize("hasRole('ADMIN')")
+    public void delete(@AuthenticationPrincipal User user, @PathVariable Long id) {
+        projectService.deleteById(user, id);
     }
 
     @PutMapping("/{id}")
     @Operation(summary = "Update project by id",
             description = "Update project by specific id")
-    public ProjectDto updateById(
-            @PathVariable Long id, @RequestBody @Valid UpdateProjectDto updateProjectDto) {
-        return projectService.updateById(id, updateProjectDto);
+    @PreAuthorize("hasRole('ADMIN')")
+    public ProjectDto updateById(@AuthenticationPrincipal User user,
+                                 @PathVariable Long id,
+                                 @RequestBody @Valid UpdateProjectDto updateProjectDto) {
+        return projectService.updateById(user, id, updateProjectDto);
     }
 }
