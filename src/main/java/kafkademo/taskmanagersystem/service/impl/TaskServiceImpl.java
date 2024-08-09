@@ -86,7 +86,8 @@ public class TaskServiceImpl implements TaskService {
     }
 
     private void validateAndSetEnums(Task task, String requestStatus, String requestPriority) {
-        Project.Status status = EnumValidator.findConstantIfValid(Project.Status.class, requestPriority)
+        Project.Status status =
+                EnumValidator.findConstantIfValid(Project.Status.class, requestPriority)
                 .orElseThrow(() -> new InvalidConstantException("Status " + requestStatus
                         + " doesn't exist"));
         Task.Priority priority = getPriorityIfValid(requestPriority);
