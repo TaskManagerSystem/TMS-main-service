@@ -32,7 +32,8 @@ public class TaskController {
     @PostMapping
     @Operation(summary = "Create task", description = "Create a new task")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public TaskDto create(@AuthenticationPrincipal User user, CreateTaskDto createTaskDto) {
+    public TaskDto create(@AuthenticationPrincipal User user,
+                          @RequestBody @Valid CreateTaskDto createTaskDto) {
         return taskService.create(user, createTaskDto);
     }
 

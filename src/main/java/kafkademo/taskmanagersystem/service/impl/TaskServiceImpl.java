@@ -1,40 +1,55 @@
 package kafkademo.taskmanagersystem.service.impl;
 
 import jakarta.persistence.EntityNotFoundException;
+import java.util.Arrays;
+import java.util.List;
 import kafkademo.taskmanagersystem.dto.task.CreateTaskDto;
 import kafkademo.taskmanagersystem.dto.task.TaskDto;
 import kafkademo.taskmanagersystem.dto.task.UpdateTaskDto;
 import kafkademo.taskmanagersystem.entity.Project;
 import kafkademo.taskmanagersystem.entity.Task;
 import kafkademo.taskmanagersystem.entity.User;
+import kafkademo.taskmanagersystem.exception.InvalidConstantException;
+import kafkademo.taskmanagersystem.exception.UserNotInProjectException;
 import kafkademo.taskmanagersystem.mapper.TaskMapper;
-import kafkademo.taskmanagersystem.repo.ProjectRepository;
 import kafkademo.taskmanagersystem.repo.TaskRepository;
+import kafkademo.taskmanagersystem.service.ProjectService;
 import kafkademo.taskmanagersystem.service.TaskService;
+import kafkademo.taskmanagersystem.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class TaskServiceImpl implements TaskService {
     private final TaskRepository taskRepository;
-    private final ProjectRepository projectRepository;
+    private final UserService userService;
+    private final ProjectService projectService;
     private final TaskMapper taskMapper;
 
     @Override
     public TaskDto create(User user, CreateTaskDto createTaskDto) {
+        Project project = projectService.getProjectById(user, createTaskDto.getProjectId());
+        User assignee = userService.findUserProfile(createTaskDto.getUserId());
+        project.getUsers().stream()
+                .filter(u -> u.equals(assignee))
+                .findAny().orElseThrow(() -> new UserNotInProjectException(
+                        "User with id " + assignee.getId() + " not in project"));
         Task task = taskMapper.toModel(createTaskDto);
-        task.setProject(getProjectIfUserIn(createTaskDto.getProjectId(), user));
-        // TODO: remake
+        task.setStatus(Project.Status.INITIATED);
+        Task.Priority priority = toPriorityIfValid(createTaskDto.getPriority());
+        task.setPriority(priority);
+        task.setProject(project);
+        task.setUser(assignee);
         return taskMapper.toDto(taskRepository.save(task));
     }
 
     @Override
-    public List<TaskDto> getAllByProjectId(Long projectId) {
-
-        return taskRepository.findAllByProjectId(projectId);
+    public List<TaskDto> getAllByProjectId(User user, Long projectId) {
+        projectService.getProjectById(user, projectId);
+        return taskRepository.findAllByProjectId(projectId).stream()
+                .map(taskMapper::toDto)
+                .toList();
     }
 
     @Override
@@ -44,24 +59,40 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public void deleteById(User user, Long id) {
-        Task task = getTaskById(user, id);
-        taskRepository.delete(task);
+        taskRepository.delete(getTaskById(user, id));
     }
 
     @Override
     public TaskDto updateById(User user, Long id, UpdateTaskDto updateTaskDto) {
-        return null;
+        Task task = getTaskById(user, id);
+        task.setName(updateTaskDto.getName());
+        task.setDescription(updateTaskDto.getDescription());
+        task.setDueDate(updateTaskDto.getDueDate());
+        validateAndSetEnums(task, updateTaskDto.getStatus(), updateTaskDto.getPriority());
+        return taskMapper.toDto(taskRepository.save(task));
     }
 
     private Task getTaskById(User user, Long id) {
         Task task = taskRepository.findById(id).orElseThrow(() ->
                 new EntityNotFoundException("Task with id " + id + " doesn't exist."));
-        getProjectIfUserIn(task.getProject().getId(), user);
+        projectService.getProjectById(user, task.getProject().getId());
         return task;
     }
 
-    private Project getProjectIfUserIn(Long projectId, User user) {
-        return projectRepository.findByProjectIdAndUserId(projectId, user.getId()).orElseThrow(() ->
-                new EntityNotFoundException("You don't have access to this project."));
+    private Task.Priority toPriorityIfValid(String requestPriority) {
+        return Arrays.stream(Task.Priority.values())
+                .filter(priority -> priority.name().equals(requestPriority))
+                .findFirst()
+                .orElseThrow(
+                        () -> new InvalidConstantException("Priority " + requestPriority
+                                + " doesn't exist")
+                );
+    }
+
+    private void validateAndSetEnums(Task task, String requestStatus, String requestPriority) {
+        Project.Status status = projectService.toStatusIfValid(requestStatus);
+        Task.Priority priority = toPriorityIfValid(requestPriority);
+        task.setStatus(status);
+        task.setPriority(priority);
     }
 }

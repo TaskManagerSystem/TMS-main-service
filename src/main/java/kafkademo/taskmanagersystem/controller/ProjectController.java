@@ -7,8 +7,8 @@ import java.util.List;
 import kafkademo.taskmanagersystem.dto.project.CreateProjectDto;
 import kafkademo.taskmanagersystem.dto.project.ProjectDto;
 import kafkademo.taskmanagersystem.dto.project.UpdateProjectDto;
-import kafkademo.taskmanagersystem.entity.User;
 import kafkademo.taskmanagersystem.dto.task.TaskDto;
+import kafkademo.taskmanagersystem.entity.User;
 import kafkademo.taskmanagersystem.service.ProjectService;
 import kafkademo.taskmanagersystem.service.TaskService;
 import lombok.RequiredArgsConstructor;
@@ -81,8 +81,9 @@ public class ProjectController {
     @GetMapping("/{projectId}/tasks")
     @Operation(summary = "Get all tasks by project id",
             description = "Get all tasks by project id")
-    public List<TaskDto> getAllByProjectId(
-            @PathVariable Long projectId) {
-        return taskService.getAllByProjectId(projectId);
+    @PreAuthorize("hasAnyRole('ADMIN','USER')")
+    public List<TaskDto> getAllByProjectId(@AuthenticationPrincipal User user,
+                                           @PathVariable Long projectId) {
+        return taskService.getAllByProjectId(user, projectId);
     }
 }

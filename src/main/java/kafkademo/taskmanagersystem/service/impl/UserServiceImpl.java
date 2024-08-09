@@ -34,7 +34,7 @@ public class UserServiceImpl implements UserService {
         }
         User user = userMapper.toEntity(requestDto);
         user.setPassword(passwordEncoder.encode(requestDto.getPassword()));
-        Role role = (Role) roleRepository.findAllByRoleName(Role.RoleName.USER)
+        Role role = roleRepository.findAllByRoleName(Role.RoleName.USER)
                 .orElseThrow(
                         () -> new EntityNotFoundException("Can not find role by name: "
                                 + Role.RoleName.USER));
@@ -75,7 +75,8 @@ public class UserServiceImpl implements UserService {
         return userRepository.findAllIds();
     }
 
-    private User findUserProfile(Long userId) {
+    @Override
+     public User findUserProfile(Long userId) {
         return userRepository.findById(userId).orElseThrow(
                 () -> new EntityNotFoundException("Can not find user's profile by id: " + userId));
     }

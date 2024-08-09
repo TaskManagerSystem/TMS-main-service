@@ -5,10 +5,10 @@ import lombok.Data;
 
 @Data
 public class CreateTaskDto {
+    private String name;
     private String description;
     private String priority;
-    private String status;
     private LocalDate dueDate;
     private Long projectId;
-    private Long assigneeId;
+    private Long userId;
 }

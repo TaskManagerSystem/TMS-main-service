@@ -9,7 +9,7 @@ import kafkademo.taskmanagersystem.entity.User;
 public interface TaskService {
     TaskDto create(User user, CreateTaskDto createTaskDto);
 
-    List<TaskDto> getAllByProjectId(Long projectId);
+    List<TaskDto> getAllByProjectId(User user, Long projectId);
 
     TaskDto getById(User user, Long id);
 
