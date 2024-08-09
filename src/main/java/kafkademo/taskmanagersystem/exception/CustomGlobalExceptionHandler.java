@@ -42,7 +42,7 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
 
     @ExceptionHandler({
             EntityNotFoundException.class,
-            InvalidStatusException.class
+            InvalidConstantException.class
     })
     public ResponseEntity<Object> handleNotFoundExceptions(
             Exception e) {

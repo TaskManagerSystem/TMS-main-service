@@ -7,8 +7,10 @@ import java.util.List;
 import kafkademo.taskmanagersystem.dto.project.CreateProjectDto;
 import kafkademo.taskmanagersystem.dto.project.ProjectDto;
 import kafkademo.taskmanagersystem.dto.project.UpdateProjectDto;
+import kafkademo.taskmanagersystem.dto.task.TaskDto;
 import kafkademo.taskmanagersystem.entity.User;
 import kafkademo.taskmanagersystem.service.ProjectService;
+import kafkademo.taskmanagersystem.service.TaskService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -29,6 +31,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "Project management", description = "Endpoints for managing projects")
 public class ProjectController {
     private final ProjectService projectService;
+    private final TaskService taskService;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -73,5 +76,14 @@ public class ProjectController {
                                  @PathVariable Long id,
                                  @RequestBody @Valid UpdateProjectDto updateProjectDto) {
         return projectService.updateById(user, id, updateProjectDto);
+    }
+
+    @GetMapping("/{projectId}/tasks")
+    @Operation(summary = "Get all tasks by project id",
+            description = "Get all tasks by project id")
+    @PreAuthorize("hasAnyRole('ADMIN','USER')")
+    public List<TaskDto> getAllByProjectId(@AuthenticationPrincipal User user,
+                                           @PathVariable Long projectId) {
+        return taskService.getAllByProjectId(user, projectId);
     }
 }

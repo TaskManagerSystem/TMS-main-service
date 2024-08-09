@@ -1,7 +1,6 @@
 package kafkademo.taskmanagersystem.service.impl;
 
 import jakarta.persistence.EntityNotFoundException;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -10,13 +9,14 @@ import kafkademo.taskmanagersystem.dto.project.ProjectDto;
 import kafkademo.taskmanagersystem.dto.project.UpdateProjectDto;
 import kafkademo.taskmanagersystem.entity.Project;
 import kafkademo.taskmanagersystem.entity.User;
-import kafkademo.taskmanagersystem.exception.InvalidStatusException;
+import kafkademo.taskmanagersystem.exception.InvalidConstantException;
 import kafkademo.taskmanagersystem.exception.InvalidUserIdsException;
 import kafkademo.taskmanagersystem.exception.UserNotInProjectException;
 import kafkademo.taskmanagersystem.mapper.ProjectMapper;
 import kafkademo.taskmanagersystem.repo.ProjectRepository;
 import kafkademo.taskmanagersystem.service.ProjectService;
 import kafkademo.taskmanagersystem.service.UserService;
+import kafkademo.taskmanagersystem.validation.EnumValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -62,7 +62,7 @@ public class ProjectServiceImpl implements ProjectService {
         project.setDescription(updateProjectDto.getDescription());
         project.setStartDate(updateProjectDto.getStartDate());
         project.setEndDate(updateProjectDto.getEndDate());
-        Project.Status status = toStatusIfValid(updateProjectDto.getStatus());
+        Project.Status status = getStatusIfValid(updateProjectDto.getStatus());
         project.setStatus(status);
         return projectMapper.toDto(projectRepository.save(project));
     }
@@ -72,11 +72,18 @@ public class ProjectServiceImpl implements ProjectService {
         projectRepository.delete(getProjectById(user, id));
     }
 
-    private Project getProjectById(User user, Long id) {
+    @Override
+    public Project getProjectById(User user, Long id) {
         Project project = projectRepository.findById(id).orElseThrow(() ->
                 new EntityNotFoundException("Can't find project with id " + id));
         isUserInProject(user, project);
         return project;
+    }
+
+    private Project.Status getStatusIfValid(String requestStatus) {
+        return EnumValidator.findConstantIfValid(Project.Status.class, requestStatus)
+                .orElseThrow(() -> new InvalidConstantException("Status " + requestStatus
+                + " doesn't exist"));
     }
 
     private void isUserInProject(User user, Project project) {
@@ -84,16 +91,6 @@ public class ProjectServiceImpl implements ProjectService {
             throw new UserNotInProjectException("Access to project with id "
                     + project.getId() + " is forbidden.");
         }
-    }
-
-    private Project.Status toStatusIfValid(String requestStatus) {
-        return Arrays.stream(Project.Status.values())
-                .filter(status -> status.name().equals(requestStatus))
-                .findFirst()
-                .orElseThrow(
-                        () -> new InvalidStatusException("Status " + requestStatus
-                                + " doesn't exist")
-                );
     }
 
     private Set<Long> getInvalidUserIds(Set<Long> userIds) {
