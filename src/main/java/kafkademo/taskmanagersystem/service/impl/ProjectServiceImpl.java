@@ -4,8 +4,10 @@ import jakarta.persistence.EntityNotFoundException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 import kafkademo.taskmanagersystem.dto.project.CreateProjectDto;
 import kafkademo.taskmanagersystem.dto.project.ProjectDto;
+import kafkademo.taskmanagersystem.dto.project.ProjectMembersUpdateDto;
 import kafkademo.taskmanagersystem.dto.project.UpdateProjectDto;
 import kafkademo.taskmanagersystem.entity.Project;
 import kafkademo.taskmanagersystem.entity.User;
@@ -78,6 +80,26 @@ public class ProjectServiceImpl implements ProjectService {
                 new EntityNotFoundException("Can't find project with id " + id));
         isUserInProject(user, project);
         return project;
+    }
+
+    @Override
+    public ProjectDto addMembers(User user, Long projectId, ProjectMembersUpdateDto updateDto) {
+        Project project = getProjectById(user, projectId);
+        Set<Long> invalidUserIds = getInvalidUserIds(updateDto.getMemberIds());
+        if (!invalidUserIds.isEmpty()) {
+            throw new InvalidUserIdsException("Invalid user ids: " + invalidUserIds);
+        }
+        Set<User> usersForAdding = updateDto.getMemberIds()
+                .stream()
+                .map(User::new)
+                .collect(Collectors.toSet());
+        project.getUsers().addAll(usersForAdding);
+        return projectMapper.toDto(projectRepository.save(project));
+    }
+
+    @Override
+    public ProjectDto deleteMembers(User user, Long projectId, ProjectMembersUpdateDto updateDto) {
+        return null;
     }
 
     private Project.Status getStatusIfValid(String requestStatus) {
