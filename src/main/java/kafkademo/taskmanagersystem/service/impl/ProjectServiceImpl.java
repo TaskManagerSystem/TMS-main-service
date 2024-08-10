@@ -99,7 +99,14 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public ProjectDto deleteMembers(User user, Long projectId, ProjectMembersUpdateDto updateDto) {
-        return null;
+        Project project = getProjectById(user, projectId);
+        Set<Long> invalidUserIds = getInvalidUserIds(updateDto.getMemberIds());
+        if (!invalidUserIds.isEmpty()) {
+            throw new InvalidUserIdsException("Invalid user ids: " + invalidUserIds);
+        }
+        Set<User> usersForRemoving = userService.findAllByIdIn(updateDto.getMemberIds());
+        project.getUsers().removeAll(usersForRemoving);
+        return projectMapper.toDto(projectRepository.save(project));
     }
 
     private Project.Status getStatusIfValid(String requestStatus) {

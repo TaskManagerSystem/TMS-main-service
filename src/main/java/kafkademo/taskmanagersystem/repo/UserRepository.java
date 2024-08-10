@@ -11,4 +11,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Query("SELECT u.id FROM User u")
     Set<Long> findAllIds();
+
+    Set<User> findAllByIdIn(Set<Long> ids);
 }

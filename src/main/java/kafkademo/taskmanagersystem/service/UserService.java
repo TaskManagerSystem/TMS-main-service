@@ -20,4 +20,6 @@ public interface UserService {
     Set<Long> getAllUserIds();
 
     User findUserProfile(Long userId);
+
+    Set<User> findAllByIdIn(Set<Long> userIds);
 }
