@@ -105,6 +105,7 @@ public class ProjectServiceImpl implements ProjectService {
             throw new InvalidUserIdsException("Invalid user ids: " + invalidUserIds);
         }
         Set<User> usersForRemoving = userService.findAllByIdIn(updateDto.getMemberIds());
+        usersForRemoving.remove(user);
         project.getUsers().removeAll(usersForRemoving);
         return projectMapper.toDto(projectRepository.save(project));
     }
