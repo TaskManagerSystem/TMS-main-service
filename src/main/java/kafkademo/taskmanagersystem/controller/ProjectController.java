@@ -6,6 +6,7 @@ import jakarta.validation.Valid;
 import java.util.List;
 import kafkademo.taskmanagersystem.dto.project.CreateProjectDto;
 import kafkademo.taskmanagersystem.dto.project.ProjectDto;
+import kafkademo.taskmanagersystem.dto.project.ProjectMembersUpdateDto;
 import kafkademo.taskmanagersystem.dto.project.UpdateProjectDto;
 import kafkademo.taskmanagersystem.dto.task.TaskDto;
 import kafkademo.taskmanagersystem.entity.User;
@@ -66,6 +67,28 @@ public class ProjectController {
     @PreAuthorize("hasRole('ADMIN')")
     public void delete(@AuthenticationPrincipal User user, @PathVariable Long id) {
         projectService.deleteById(user, id);
+    }
+
+    @DeleteMapping("/{projectId}/members")
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    @Operation(summary = "Delete members from project",
+            description = "Delete members from project")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ProjectDto deleteMembers(@AuthenticationPrincipal User user,
+                                    @PathVariable Long projectId,
+                                    @RequestBody ProjectMembersUpdateDto updateDto) {
+        return projectService.deleteMembers(user, projectId, updateDto);
+    }
+
+    @PutMapping("/{projectId}/members")
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    @Operation(summary = "Add members from project",
+            description = "Add members from project")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ProjectDto addMembers(@AuthenticationPrincipal User user,
+                                 @PathVariable Long projectId,
+                                 @RequestBody ProjectMembersUpdateDto updateDto) {
+        return projectService.addMembers(user, projectId, updateDto);
     }
 
     @PutMapping("/{id}")

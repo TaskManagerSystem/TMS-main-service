@@ -80,4 +80,9 @@ public class UserServiceImpl implements UserService {
         return userRepository.findById(userId).orElseThrow(
                 () -> new EntityNotFoundException("Can not find user's profile by id: " + userId));
     }
+
+    @Override
+    public Set<User> findAllByIdIn(Set<Long> userIds) {
+        return userRepository.findAllByIdIn(userIds);
+    }
 }

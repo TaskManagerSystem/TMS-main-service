@@ -3,6 +3,7 @@ package kafkademo.taskmanagersystem.service;
 import java.util.List;
 import kafkademo.taskmanagersystem.dto.project.CreateProjectDto;
 import kafkademo.taskmanagersystem.dto.project.ProjectDto;
+import kafkademo.taskmanagersystem.dto.project.ProjectMembersUpdateDto;
 import kafkademo.taskmanagersystem.dto.project.UpdateProjectDto;
 import kafkademo.taskmanagersystem.entity.Project;
 import kafkademo.taskmanagersystem.entity.User;
@@ -20,4 +21,8 @@ public interface ProjectService {
     void deleteById(User user, Long id);
 
     Project getProjectById(User user, Long id);
+
+    ProjectDto addMembers(User user, Long projectId, ProjectMembersUpdateDto updateDto);
+
+    ProjectDto deleteMembers(User user, Long projectId, ProjectMembersUpdateDto updateDto);
 }
