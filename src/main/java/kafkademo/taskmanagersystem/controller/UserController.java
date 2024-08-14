@@ -45,7 +45,7 @@ public class UserController {
     @Operation(summary = "Update current user's profile",
             description = "Update the profile information of the currently authenticated user")
     public ResponseUserDto updateProfile(@RequestBody @Valid UpdateUserRequestDto updateDto,
-                                          //TODO: add @AuthorizationPrincipal annotation
+                                          @AuthenticationPrincipal
                                           User user) {
         return userService.updateUserProfile(updateDto, user.getId());
     }
