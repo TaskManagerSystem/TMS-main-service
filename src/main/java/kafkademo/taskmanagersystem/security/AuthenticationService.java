@@ -5,4 +5,6 @@ import kafkademo.taskmanagersystem.dto.user.response.UserLoginResponseDto;
 
 public interface AuthenticationService {
     UserLoginResponseDto login(UserLoginRequestDto requestDto);
+
+    void tokenValidate(String token);
 }
