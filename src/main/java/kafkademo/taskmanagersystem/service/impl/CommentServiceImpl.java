@@ -11,8 +11,10 @@ import kafkademo.taskmanagersystem.repo.CommentRepository;
 import kafkademo.taskmanagersystem.repo.UserRepository;
 import kafkademo.taskmanagersystem.service.CommentService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class CommentServiceImpl implements CommentService {
@@ -24,9 +26,11 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public CommentResponseDto addComment(CommentRequestDto requestDto) {
         User user = userRepository.findById(requestDto.getUser().getId())
-                .orElseThrow(
-                        () -> new EntityNotFoundException("Can not find user by id: "
-                                + requestDto.getUser().getId()));
+                .orElseThrow(() -> {
+                    String message = "Can not find user by id: " + requestDto.getUser().getId();
+                    log.error(message);
+                    return new EntityNotFoundException(message);
+                });
         //Task task = //TODO: complete this method after adding task service
         Comment comment = new Comment();
         comment.setText(requestDto.getText());
