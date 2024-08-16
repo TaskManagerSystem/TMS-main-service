@@ -17,8 +17,10 @@ import kafkademo.taskmanagersystem.service.TaskService;
 import kafkademo.taskmanagersystem.service.UserService;
 import kafkademo.taskmanagersystem.validation.EnumValidator;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class TaskServiceImpl implements TaskService {
@@ -29,24 +31,29 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public TaskDto create(User user, CreateTaskDto createTaskDto) {
+        log.info("Creating task with details: {}", createTaskDto);
         Project project = projectService.getProjectById(user, createTaskDto.getProjectId());
         User assignee = userService.findUserProfile(createTaskDto.getUserId());
         project.getUsers().stream()
                 .filter(u -> u.equals(assignee))
-                .findAny().orElseThrow(() -> new UserNotInProjectException(
-                        "User with id " + assignee.getId() + " not in project"));
+                .findAny().orElseThrow(() -> {
+                    String message = "User with id " + assignee.getId() + " not in project";
+                    return new UserNotInProjectException(message);
+                });
         Task task = taskMapper.toModel(createTaskDto);
         task.setStatus(Project.Status.INITIATED);
         Task.Priority priority = getPriorityIfValid(createTaskDto.getPriority());
         task.setPriority(priority);
         task.setProject(project);
         task.setUser(assignee);
+        log.info("Task was created successfully with id: {}", task.getId());
         return taskMapper.toDto(taskRepository.save(task));
     }
 
     @Override
     public List<TaskDto> getAllByProjectId(User user, Long projectId) {
         projectService.getProjectById(user, projectId);
+        log.info("Fetching all tasks for projectId: {}", projectId);
         return taskRepository.findAllByProjectId(projectId).stream()
                 .map(taskMapper::toDto)
                 .toList();
@@ -54,11 +61,13 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public TaskDto getById(User user, Long id) {
+        log.info("Fetching task by id: {}", id);
         return taskMapper.toDto(getTaskById(user, id));
     }
 
     @Override
     public void deleteById(User user, Long id) {
+        log.info("Deleting task by id: {}", id);
         taskRepository.delete(getTaskById(user, id));
     }
 
@@ -69,27 +78,35 @@ public class TaskServiceImpl implements TaskService {
         task.setDescription(updateTaskDto.getDescription());
         task.setDueDate(updateTaskDto.getDueDate());
         validateAndSetEnums(task, updateTaskDto.getStatus(), updateTaskDto.getPriority());
+        log.info("Task updated successfully with id: {}", id);
         return taskMapper.toDto(taskRepository.save(task));
     }
 
     private Task getTaskById(User user, Long id) {
-        Task task = taskRepository.findById(id).orElseThrow(() ->
-                new EntityNotFoundException("Task with id " + id + " doesn't exist."));
+        log.info("Fetching task by id: {}", id);
+        Task task = taskRepository.findById(id).orElseThrow(() -> {
+            String message = "Task with id " + id + " doesn't exist.";
+            return new EntityNotFoundException(message);
+        });
         projectService.getProjectById(user, task.getProject().getId());
         return task;
     }
 
     private Task.Priority getPriorityIfValid(String requestPriority) {
         return EnumValidator.findConstantIfValid(Task.Priority.class, requestPriority)
-                .orElseThrow(() -> new InvalidConstantException("Priority " + requestPriority
-                        + " doesn't exist"));
+                .orElseThrow(() -> {
+                    String message = "Priority " + requestPriority + " doesn't exist";
+                    return new InvalidConstantException(message);
+                });
     }
 
     private void validateAndSetEnums(Task task, String requestStatus, String requestPriority) {
         Project.Status status =
                 EnumValidator.findConstantIfValid(Project.Status.class, requestPriority)
-                .orElseThrow(() -> new InvalidConstantException("Status " + requestStatus
-                        + " doesn't exist"));
+                        .orElseThrow(() -> {
+                            String message = "Status " + requestStatus + " doesn't exist";
+                            return new InvalidConstantException(message);
+                        });
         Task.Priority priority = getPriorityIfValid(requestPriority);
         task.setStatus(status);
         task.setPriority(priority);

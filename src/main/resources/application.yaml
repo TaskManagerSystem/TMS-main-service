@@ -1,0 +1,21 @@
+logging:
+  level:
+    root: INFO
+    kafkademo.taskmanagersystem: DEBUG
+
+  file:
+    name: logs/spring-boot-app.log
+    max-size: 10MB
+    max-history: 30
+
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+
+loggers:
+  error:
+    file:
+      name: logs/error-app.log
+      max-size: 10MB
+      max-history: 30
+      pattern: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
