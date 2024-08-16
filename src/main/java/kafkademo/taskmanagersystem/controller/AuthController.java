@@ -9,8 +9,7 @@ import kafkademo.taskmanagersystem.security.AuthenticationService;
 import kafkademo.taskmanagersystem.service.UserService;
 import kafkademo.taskmanagersystem.validation.VerificationService;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,12 +19,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+@Slf4j
 @RestController
 @RequestMapping("/auth")
 @RequiredArgsConstructor
 public class AuthController {
-    private static final Logger logger = LoggerFactory.getLogger(AuthController.class);
-
     private final UserService userService;
     private final AuthenticationService authenticationService;
     private final VerificationService verificationService;
@@ -44,10 +42,10 @@ public class AuthController {
     public ResponseEntity<?> confirm(@RequestParam String token) {
         boolean isVerified = verificationService.verifyData(token);
         if (isVerified) {
-            logger.info("Token verified successfully for token: {}", token);
+            log.info("Token verified successfully for token: {}", token);
             return ResponseEntity.ok("Email successfully linked");
         } else {
-            logger.warn("Invalid token received: {}", token);
+            log.warn("Invalid token received: {}", token);
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body("Invalid or expired token");
         }
