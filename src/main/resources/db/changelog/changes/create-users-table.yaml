@@ -46,5 +46,3 @@ databaseChangeLog:
               - column:
                   name: chat_id
                   type: BIGINT
-                  constraints:
-                    nullable: false
