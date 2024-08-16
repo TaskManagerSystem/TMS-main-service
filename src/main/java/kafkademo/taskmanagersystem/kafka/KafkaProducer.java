@@ -10,11 +10,10 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class KafkaProducer {
-    private static final String TOKEN_TOPIC = "token-validation-response-topic";
     private final KafkaTemplate<String, String> kafkaTemplate;
 
     public void sendResponseToAttachmentService(String responseMessage) {
-        sendMessageToTheTopic(TOKEN_TOPIC, responseMessage);
+        sendMessageToTheTopic("token-validation-response-topic", responseMessage);
     }
 
     private void sendMessageToTheTopic(String topic, String message) {
