@@ -11,6 +11,10 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 @Service
 public class KafkaConsumer {
+    private static final String SEPARATOR = ":";
+    private static final int TOKEN_INDEX = 0;
+    private static final int EMAIL_INDEX = 1;
+    private static final int CHAT_ID_INDEX = 2;
     private final AuthenticationService authenticationService;
     private final VerificationService verificationService;
 
@@ -23,9 +27,9 @@ public class KafkaConsumer {
     public void emailValidate(String value) {
         VerificationData verificationData = new VerificationData();
         verificationData.setCreatedAt(LocalDateTime.now());
-        String token = value.split(":")[0];
-        verificationData.setEmail(value.split(":")[1]);
-        verificationData.setChatId(value.split(":")[2]);
+        String token = value.split(SEPARATOR)[TOKEN_INDEX];
+        verificationData.setEmail(value.split(SEPARATOR)[EMAIL_INDEX]);
+        verificationData.setChatId(value.split(SEPARATOR)[CHAT_ID_INDEX]);
         verificationService.saveVerificationData(token, verificationData);
     }
 }

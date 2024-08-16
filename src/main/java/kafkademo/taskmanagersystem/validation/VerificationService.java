@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class VerificationService {
+    private static final int EXPIRATION_PERIOD = 15;
     private final ConcurrentHashMap<String, VerificationData> verificationMap =
             new ConcurrentHashMap<>();
     @Autowired
@@ -27,7 +28,8 @@ public class VerificationService {
         }
         verificationMap.remove(token);
         LocalDateTime createdAt = verificationData.getCreatedAt();
-        if (LocalDateTime.now().isAfter(createdAt.plusMinutes(15))) {
+        LocalDateTime expiredAt = createdAt.plusMinutes(EXPIRATION_PERIOD);
+        if (LocalDateTime.now().isAfter(expiredAt)) {
             return false;
         } else {
             User user = userRepository.findUserByEmail(verificationData.getEmail()).orElseThrow(
