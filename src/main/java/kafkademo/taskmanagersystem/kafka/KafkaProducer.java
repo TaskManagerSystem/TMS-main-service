@@ -13,13 +13,16 @@ public class KafkaProducer {
     private final KafkaTemplate<String, String> kafkaTemplate;
 
     public void sendResponseToAttachmentService(String responseMessage) {
+        sendMessageToTheTopic("token-validation-response-topic", responseMessage);
+    }
+
+    private void sendMessageToTheTopic(String topic, String message) {
         try {
-            ProducerRecord<String, String> record = new ProducerRecord<>(
-                    "token-validation-response-topic", responseMessage);
-            log.info("Record sending: " + record);
+            ProducerRecord<String, String> record = new ProducerRecord<>(topic, message);
             kafkaTemplate.send(record);
+            log.info("Record sending: {}", record);
         } catch (Exception e) {
-            log.error("Error sending response:" + responseMessage, e);
+            log.error("Error sending response: {}", message, e);
         }
     }
 }
