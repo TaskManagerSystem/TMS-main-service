@@ -45,6 +45,8 @@ public class User implements UserDetails {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
+    @Column(name = "chat_id")
+    private Long chatId;
 
     public User(long id) {
         this.id = id;
