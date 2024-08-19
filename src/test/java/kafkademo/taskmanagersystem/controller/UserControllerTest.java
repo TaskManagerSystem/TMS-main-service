@@ -35,7 +35,6 @@ class UserControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-
     private static ResponseUserDto createResponseUserDto() {
         ResponseUserDto responseUserDto = new ResponseUserDto();
         responseUserDto.setId(1L);
@@ -62,7 +61,8 @@ class UserControllerTest {
     private void setupSecurityContext(Long userId) {
         User mockUser = new User(userId);
         mockUser.setEmail("testuser@example.com");
-        Authentication authentication = new UsernamePasswordAuthenticationToken(mockUser, "password", mockUser.getAuthorities());
+        Authentication authentication = new UsernamePasswordAuthenticationToken(mockUser,
+                "password", mockUser.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authentication);
     }
 
