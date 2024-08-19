@@ -22,6 +22,7 @@ public class KafkaConsumerConfig {
     private String groupId;
 
     @Bean
+
     public ConsumerFactory<String, String> consumerFactory() {
         Map<String, Object> configPops = new HashMap<>();
         configPops.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
