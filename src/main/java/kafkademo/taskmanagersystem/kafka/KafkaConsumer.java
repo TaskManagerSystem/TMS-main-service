@@ -2,6 +2,7 @@ package kafkademo.taskmanagersystem.kafka;
 
 import java.time.LocalDateTime;
 import kafkademo.taskmanagersystem.dto.user.VerificationData;
+import kafkademo.taskmanagersystem.repo.UserRepository;
 import kafkademo.taskmanagersystem.security.AuthenticationService;
 import kafkademo.taskmanagersystem.validation.VerificationService;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +18,8 @@ public class KafkaConsumer {
     private static final int CHAT_ID_INDEX = 2;
     private final AuthenticationService authenticationService;
     private final VerificationService verificationService;
+    private final UserRepository userRepository;
+    private final KafkaProducer producer;
 
     @KafkaListener(topics = "token-validation-topic", groupId = "task-manager-systems")
     public void tokenValidate(String token) {
@@ -30,6 +33,12 @@ public class KafkaConsumer {
         String token = value.split(SEPARATOR)[TOKEN_INDEX];
         verificationData.setEmail(value.split(SEPARATOR)[EMAIL_INDEX]);
         verificationData.setChatId(value.split(SEPARATOR)[CHAT_ID_INDEX]);
-        verificationService.saveVerificationData(token, verificationData);
+        boolean isPresent =
+                userRepository.findUserByEmail(verificationData.getEmail()).isPresent();
+        verificationData.setPresent(isPresent);
+        if (isPresent) {
+            verificationService.saveVerificationData(token, verificationData);
+        }
+        producer.sendVerificationData(token, verificationData);
     }
 }

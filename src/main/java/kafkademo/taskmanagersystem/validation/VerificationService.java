@@ -1,6 +1,5 @@
 package kafkademo.taskmanagersystem.validation;
 
-import jakarta.persistence.EntityNotFoundException;
 import java.time.LocalDateTime;
 import java.util.concurrent.ConcurrentHashMap;
 import kafkademo.taskmanagersystem.dto.user.VerificationData;
@@ -11,7 +10,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class VerificationService {
-    private static final int EXPIRATION_PERIOD = 15;
+    private static final int EXPIRATION_PERIOD = 1;
     private final ConcurrentHashMap<String, VerificationData> verificationMap =
             new ConcurrentHashMap<>();
     @Autowired
@@ -28,16 +27,13 @@ public class VerificationService {
         }
         verificationMap.remove(token);
         LocalDateTime createdAt = verificationData.getCreatedAt();
-        LocalDateTime expiredAt = createdAt.plusMinutes(EXPIRATION_PERIOD);
+        LocalDateTime expiredAt = createdAt.plusHours(EXPIRATION_PERIOD);
         if (LocalDateTime.now().isAfter(expiredAt)) {
             return false;
-        } else {
-            User user = userRepository.findUserByEmail(verificationData.getEmail()).orElseThrow(
-                    () -> new EntityNotFoundException("Can't find user with email "
-                            + verificationData.getEmail()));
-            user.setChatId(Long.parseLong(verificationData.getChatId()));
-            userRepository.save(user);
-            return true;
         }
+        User user = userRepository.findUserByEmail(verificationData.getEmail()).get();
+        user.setChatId(Long.parseLong(verificationData.getChatId()));
+        userRepository.save(user);
+        return true;
     }
 }
