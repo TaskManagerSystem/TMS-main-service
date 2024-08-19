@@ -33,9 +33,10 @@ public class KafkaConsumer {
         String token = value.split(SEPARATOR)[TOKEN_INDEX];
         verificationData.setEmail(value.split(SEPARATOR)[EMAIL_INDEX]);
         verificationData.setChatId(value.split(SEPARATOR)[CHAT_ID_INDEX]);
-        verificationData.setPresent(
-                userRepository.findUserByEmail(verificationData.getEmail()).isPresent());
-        if (verificationData.isPresent()) {
+        boolean isPresent =
+                userRepository.findUserByEmail(verificationData.getEmail()).isPresent();
+        verificationData.setPresent(isPresent);
+        if (isPresent) {
             verificationService.saveVerificationData(token, verificationData);
         }
         producer.sendVerificationData(token, verificationData);
