@@ -2,6 +2,8 @@ package kafkademo.taskmanagersystem.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -20,5 +22,16 @@ public class Label {
     @Column(nullable = false)
     private String name;
     @Column(nullable = false)
-    private String color;
+    @Enumerated(EnumType.STRING)
+    private Color color;
+
+    public enum Color {
+        GREEN,
+        RED,
+        WHITE,
+        YELLOW,
+        GREY,
+        BLUE,
+        ORANGE
+    }
 }

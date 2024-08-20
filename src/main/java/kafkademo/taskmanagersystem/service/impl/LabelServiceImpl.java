@@ -5,9 +5,11 @@ import java.util.List;
 import kafkademo.taskmanagersystem.dto.label.CreateLabelRequestDto;
 import kafkademo.taskmanagersystem.dto.label.LabelDto;
 import kafkademo.taskmanagersystem.entity.Label;
+import kafkademo.taskmanagersystem.exception.InvalidConstantException;
 import kafkademo.taskmanagersystem.mapper.LabelMapper;
 import kafkademo.taskmanagersystem.repo.LabelRepository;
 import kafkademo.taskmanagersystem.service.LabelService;
+import kafkademo.taskmanagersystem.validation.EnumValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -21,8 +23,11 @@ public class LabelServiceImpl implements LabelService {
 
     @Override
     public LabelDto create(CreateLabelRequestDto requestDto) {
+        EnumValidator.findConstantIfValid(Label.Color.class, requestDto.getColor()).orElseThrow(() -> {
+            String message = "Color: " + requestDto.getColor() + " doesn't exist";
+            return new InvalidConstantException(message);
+        });
         Label label = labelMapper.toEntity(requestDto);
-
         log.info("Label created with id: {}. Label details: {}", label.getId(), requestDto);
         return labelMapper.toDto(labelRepository.save(label));
     }
@@ -46,7 +51,7 @@ public class LabelServiceImpl implements LabelService {
                     return new EntityNotFoundException();
                 });
         label.setName(updateDto.getName());
-        label.setColor(updateDto.getColor());
+        label.setColor(Label.Color.valueOf(updateDto.getColor()));
         return labelMapper.toDto(labelRepository.save(label));
     }
 
