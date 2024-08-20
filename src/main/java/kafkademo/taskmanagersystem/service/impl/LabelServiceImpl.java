@@ -23,10 +23,11 @@ public class LabelServiceImpl implements LabelService {
 
     @Override
     public LabelDto create(CreateLabelRequestDto requestDto) {
-        EnumValidator.findConstantIfValid(Label.Color.class, requestDto.getColor()).orElseThrow(() -> {
-            String message = "Color: " + requestDto.getColor() + " doesn't exist";
-            return new InvalidConstantException(message);
-        });
+        EnumValidator.findConstantIfValid(Label.Color.class, requestDto.getColor())
+                .orElseThrow(() -> {
+                    String message = "Color: " + requestDto.getColor() + " doesn't exist";
+                    return new InvalidConstantException(message);
+                });
         Label label = labelMapper.toEntity(requestDto);
         log.info("Label created with id: {}. Label details: {}", label.getId(), requestDto);
         return labelMapper.toDto(labelRepository.save(label));
