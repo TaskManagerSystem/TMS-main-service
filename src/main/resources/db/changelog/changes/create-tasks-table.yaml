@@ -8,41 +8,41 @@ databaseChangeLog:
             columns:
               - column:
                   name: id
-                  type: BIGINT
+                  type: bigint
                   autoIncrement: true
                   constraints:
                     primaryKey: true
                     nullable: false
               - column:
                   name: name
-                  type: VARCHAR(255)
+                  type: varchar(40)
                   constraints:
                     nullable: false
               - column:
                   name: description
-                  type: TEXT
+                  type: varchar(255)
               - column:
                   name: priority
-                  type: VARCHAR(20)
+                  type: enum('LOW', 'MEDIUM', 'HIGH')
                   constraints:
                     nullable: false
               - column:
                   name: status
-                  type: VARCHAR(20)
+                  type: enum('INITIATED', 'IN_PROGRESS', 'COMPLETED')
                   constraints:
                     nullable: false
               - column:
                   name: due_date
-                  type: DATE
+                  type: date
                   constraints:
                     nullable: false
               - column:
                   name: project_id
-                  type: BIGINT
+                  type: bigint
                   constraints:
                     nullable: false
               - column:
                   name: user_id
-                  type: BIGINT
+                  type: bigint
                   constraints:
                     nullable: false
