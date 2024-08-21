@@ -2,6 +2,7 @@ package kafkademo.taskmanagersystem.config;
 
 import java.util.HashMap;
 import java.util.Map;
+import kafkademo.taskmanagersystem.dto.user.VerificationData;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.beans.factory.annotation.Value;
