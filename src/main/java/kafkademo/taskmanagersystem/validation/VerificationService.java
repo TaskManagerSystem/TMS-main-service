@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class VerificationService {
     private static final int EXPIRATION_PERIOD = 1;
-    private final ConcurrentHashMap<String, VerificationData> verificationMap;
+    private final ConcurrentHashMap<String, VerificationData> verificationMap = new ConcurrentHashMap<>();
     private final UserRepository userRepository;
 
     public void saveVerificationData(String token, VerificationData verificationData) {
