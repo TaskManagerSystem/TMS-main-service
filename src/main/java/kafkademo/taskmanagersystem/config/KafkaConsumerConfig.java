@@ -28,7 +28,7 @@ public class KafkaConsumerConfig {
         configPops.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
         configPops.put(ConsumerConfig.GROUP_ID_CONFIG, groupId);
         configPops.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
-        configPops.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
+        configPops.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JsonDeserializer.class);
         configPops.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
         configPops.put(JsonDeserializer.TRUSTED_PACKAGES, "*");
         return new DefaultKafkaConsumerFactory<>(configPops);
