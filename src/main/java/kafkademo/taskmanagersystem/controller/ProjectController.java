@@ -76,7 +76,7 @@ public class ProjectController {
     @PreAuthorize("hasRole('ADMIN')")
     public ProjectDto deleteMembers(@AuthenticationPrincipal User user,
                                     @PathVariable Long projectId,
-                                    @RequestBody ProjectMembersUpdateDto updateDto) {
+                                    @RequestBody @Valid ProjectMembersUpdateDto updateDto) {
         return projectService.deleteMembers(user, projectId, updateDto);
     }
 
@@ -87,7 +87,7 @@ public class ProjectController {
     @PreAuthorize("hasRole('ADMIN')")
     public ProjectDto addMembers(@AuthenticationPrincipal User user,
                                  @PathVariable Long projectId,
-                                 @RequestBody ProjectMembersUpdateDto updateDto) {
+                                 @RequestBody @Valid ProjectMembersUpdateDto updateDto) {
         return projectService.addMembers(user, projectId, updateDto);
     }
 
