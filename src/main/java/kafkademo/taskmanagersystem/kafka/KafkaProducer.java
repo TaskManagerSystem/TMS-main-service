@@ -11,8 +11,7 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class KafkaProducer {
-    private final KafkaTemplate<String, String> stringKafkaTemplate;
-    private final KafkaTemplate<String, VerificationData> verificationDataKafkaTemplate;
+    private final KafkaTemplate<String, Object> kafkaTemplate;
 
     public void sendResponseToAttachmentService(String responseMessage) {
         sendStringMessageToTheTopic("token-validation-response-topic", responseMessage);
@@ -20,11 +19,11 @@ public class KafkaProducer {
 
     public void sendVerificationData(String token, VerificationData verificationData) {
         try {
-            ProducerRecord<String, VerificationData> record =
+            ProducerRecord<String, Object> record =
                     new ProducerRecord<>("email-validation-response-topic",
                             token,
                             verificationData);
-            verificationDataKafkaTemplate.send(record);
+            kafkaTemplate.send(record);
         } catch (Exception e) {
             log.error("Error sending response: {}", verificationData, e);
         }
@@ -32,8 +31,8 @@ public class KafkaProducer {
 
     private void sendStringMessageToTheTopic(String topic, String message) {
         try {
-            ProducerRecord<String, String> record = new ProducerRecord<>(topic, message);
-            stringKafkaTemplate.send(record);
+            ProducerRecord<String, Object> record = new ProducerRecord<>(topic, message);
+            kafkaTemplate.send(record);
             log.info("Record sending: {}", record);
         } catch (Exception e) {
             log.error("Error sending response: {}", message, e);
