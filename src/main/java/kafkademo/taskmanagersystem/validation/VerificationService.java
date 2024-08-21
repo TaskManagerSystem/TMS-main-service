@@ -5,16 +5,16 @@ import java.util.concurrent.ConcurrentHashMap;
 import kafkademo.taskmanagersystem.dto.user.VerificationData;
 import kafkademo.taskmanagersystem.entity.User;
 import kafkademo.taskmanagersystem.repo.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class VerificationService {
     private static final int EXPIRATION_PERIOD = 1;
     private final ConcurrentHashMap<String, VerificationData> verificationMap =
             new ConcurrentHashMap<>();
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
     public void saveVerificationData(String token, VerificationData verificationData) {
         verificationMap.put(token, verificationData);
