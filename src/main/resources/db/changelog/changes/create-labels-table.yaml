@@ -19,6 +19,6 @@ databaseChangeLog:
                     nullable: false
               - column:
                   name: color
-                  type: varchar(30)
+                  type: enum('GREEN', 'RED', 'WHITE', 'YELLOW', 'GREY', 'BLUE', 'ORANGE')
                   constraints:
                     nullable: false
