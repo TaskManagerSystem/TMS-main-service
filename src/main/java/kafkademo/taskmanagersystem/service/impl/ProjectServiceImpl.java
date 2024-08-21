@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+import kafkademo.taskmanagersystem.dto.NotificationData;
 import kafkademo.taskmanagersystem.dto.project.CreateProjectDto;
 import kafkademo.taskmanagersystem.dto.project.ProjectDto;
 import kafkademo.taskmanagersystem.dto.project.ProjectMembersUpdateDto;
@@ -14,6 +15,7 @@ import kafkademo.taskmanagersystem.entity.User;
 import kafkademo.taskmanagersystem.exception.InvalidConstantException;
 import kafkademo.taskmanagersystem.exception.InvalidUserIdsException;
 import kafkademo.taskmanagersystem.exception.UserNotInProjectException;
+import kafkademo.taskmanagersystem.kafka.KafkaProducer;
 import kafkademo.taskmanagersystem.mapper.ProjectMapper;
 import kafkademo.taskmanagersystem.repo.ProjectRepository;
 import kafkademo.taskmanagersystem.service.ProjectService;
@@ -30,7 +32,7 @@ public class ProjectServiceImpl implements ProjectService {
     private final ProjectRepository projectRepository;
     private final ProjectMapper projectMapper;
     private final UserService userService;
-
+    private final KafkaProducer kafkaProducer;
     @Override
     public ProjectDto create(User user, CreateProjectDto createProjectDto) {
         Set<Long> invalidUserIds = getInvalidUserIds(createProjectDto.getUserIds());
@@ -47,6 +49,7 @@ public class ProjectServiceImpl implements ProjectService {
         }
         project.setUsers(usersInProject);
         log.info("Project created with id: {}", project.getId());
+        sendNotificationData(project);
         return projectMapper.toDto(projectRepository.save(project));
     }
 
@@ -131,6 +134,22 @@ public class ProjectServiceImpl implements ProjectService {
                 projectId, project.getUsers());
 
         return projectMapper.toDto(projectRepository.save(project));
+    }
+
+    private void sendNotificationData(Project project) {
+        String topic = "Project created";
+        String message = String.format("A new project has been created: ID=%d, Name=%s, DueDate=%s",
+                project.getId(), project.getName(), project.getStartDate());
+
+        for (User user : project.getUsers()) {
+            NotificationData notificationData = NotificationData.builder()
+                    .email(user.getEmail())
+                    .chatId(user.getChatId().toString())
+                    .message(message)
+                    .topic(topic)
+                    .build();
+            kafkaProducer.sendNotificationData(notificationData);
+        }
     }
 
     private Project.Status getStatusIfValid(String requestStatus) {

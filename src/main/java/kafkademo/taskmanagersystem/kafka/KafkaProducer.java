@@ -1,5 +1,6 @@
 package kafkademo.taskmanagersystem.kafka;
 
+import kafkademo.taskmanagersystem.dto.NotificationData;
 import kafkademo.taskmanagersystem.dto.user.VerificationData;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 public class KafkaProducer {
     private final KafkaTemplate<String, String> stringKafkaTemplate;
     private final KafkaTemplate<String, VerificationData> verificationDataKafkaTemplate;
+    private final KafkaTemplate<String, NotificationData> notificationDataKafkaTemplate;
 
     public void sendResponseToAttachmentService(String responseMessage) {
         sendStringMessageToTheTopic("token-validation-response-topic", responseMessage);
@@ -27,6 +29,17 @@ public class KafkaProducer {
             verificationDataKafkaTemplate.send(record);
         } catch (Exception e) {
             log.error("Error sending response: {}", verificationData, e);
+        }
+    }
+
+    public void sendNotificationData(NotificationData notificationData) {
+        try {
+            ProducerRecord<String, NotificationData> record =
+                    new ProducerRecord<>("email-validation-response-topic",
+                            notificationData);
+            notificationDataKafkaTemplate.send(record);
+        } catch (Exception e) {
+            log.error("Error sending response: {}", notificationData, e);
         }
     }
 
