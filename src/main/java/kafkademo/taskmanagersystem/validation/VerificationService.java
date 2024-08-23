@@ -1,8 +1,8 @@
 package kafkademo.taskmanagersystem.validation;
 
+import com.example.dto.VerificationData;
 import java.time.LocalDateTime;
 import java.util.concurrent.ConcurrentHashMap;
-import kafkademo.taskmanagersystem.dto.user.VerificationData;
 import kafkademo.taskmanagersystem.entity.User;
 import kafkademo.taskmanagersystem.repo.UserRepository;
 import lombok.RequiredArgsConstructor;

@@ -1,7 +1,7 @@
 package kafkademo.taskmanagersystem.kafka;
 
 import com.example.dto.IsVerificationDto;
-import kafkademo.taskmanagersystem.dto.user.VerificationData;
+import com.example.dto.VerificationData;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.producer.ProducerRecord;
