@@ -11,13 +11,4 @@ databaseChangeLog:
                   valueComputed: "(SELECT id FROM roles WHERE role_name = 'ADMIN')"
               - column:
                   name: user_id
-                  valueComputed: "(SELECT id FROM users WHERE email = 'sasha@gmail.com')"
-        - insert:
-            tableName: users_roles
-            columns:
-              - column:
-                  name: role_id
-                  valueComputed: "(SELECT id FROM roles WHERE role_name = 'ADMIN')"
-              - column:
-                  name: user_id
-                  valueComputed: "(SELECT id FROM users WHERE email = 'sasha1@gmail.com')"
+                  valueComputed: "(SELECT id FROM users WHERE email = 'sashafarion@gmail.com')"
