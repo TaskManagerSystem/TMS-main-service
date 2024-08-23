@@ -1,6 +1,6 @@
 package kafkademo.taskmanagersystem.security;
 
-import kafkademo.taskmanagersystem.dto.IsVerificationDto;
+import com.example.dto.IsVerificationDto;
 import kafkademo.taskmanagersystem.dto.user.request.UserLoginRequestDto;
 import kafkademo.taskmanagersystem.dto.user.response.UserLoginResponseDto;
 import kafkademo.taskmanagersystem.kafka.KafkaProducer;
@@ -30,14 +30,13 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     @Override
-    public void tokenValidate(String token) {
-        IsVerificationDto dto = new IsVerificationDto();
+    public void tokenValidate(IsVerificationDto dto) {
         try {
-            log.info("Got token from attachment: " + token);
-            dto.setVerificationResult(jwtUtil.isValidToken(token));
+            log.info("Got token from attachment: " + dto.getToken());
+            dto.setValid(jwtUtil.isValidToken(dto.getToken()));
             producer.sendResponseToAttachmentService(dto);
         } catch (Exception e) {
-            log.error("Error processing token: " + token, e);
+            log.error("Error processing token: " + dto.getToken(), e);
         }
     }
 }

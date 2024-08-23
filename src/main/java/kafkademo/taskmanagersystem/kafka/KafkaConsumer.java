@@ -1,5 +1,6 @@
 package kafkademo.taskmanagersystem.kafka;
 
+import com.example.dto.IsVerificationDto;
 import java.time.LocalDateTime;
 import kafkademo.taskmanagersystem.dto.user.VerificationData;
 import kafkademo.taskmanagersystem.repo.UserRepository;
@@ -22,8 +23,8 @@ public class KafkaConsumer {
     private final KafkaProducer producer;
 
     @KafkaListener(topics = "token-validation-topic", groupId = "task-manager-systems")
-    public void tokenValidate(String token) {
-        authenticationService.tokenValidate(token);
+    public void tokenValidate(IsVerificationDto dto) {
+        authenticationService.tokenValidate(dto);
     }
 
     @KafkaListener(topics = "email-validation-topic", groupId = "task-manager-systems")

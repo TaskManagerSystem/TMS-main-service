@@ -1,5 +1,6 @@
 package kafkademo.taskmanagersystem.kafka;
 
+import com.example.dto.IsVerificationDto;
 import kafkademo.taskmanagersystem.dto.user.VerificationData;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,7 +15,6 @@ public class KafkaProducer {
     private final KafkaTemplate<String, Object> kafkaTemplate;
 
     public void sendResponseToAttachmentService(IsVerificationDto dto) {
-        dto.setValid(false);
         sendStringMessageToTheTopic("token-validation-response-topic", dto);
     }
 
