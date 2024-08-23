@@ -15,7 +15,14 @@ public class KafkaProducer {
     private final KafkaTemplate<String, Object> kafkaTemplate;
 
     public void sendResponseToAttachmentService(IsVerificationDto dto) {
-        sendStringMessageToTheTopic("token-validation-response-topic", dto);
+        try {
+            ProducerRecord<String, Object> record = new ProducerRecord<>(
+                    "token-validation-response-topic", dto);
+            kafkaTemplate.send(record);
+            log.info("Record sending: {}", record);
+        } catch (Exception e) {
+            log.error("Error sending response: {}", dto, e);
+        }
     }
 
     public void sendVerificationData(String token, VerificationData verificationData) {
@@ -27,16 +34,6 @@ public class KafkaProducer {
             kafkaTemplate.send(record);
         } catch (Exception e) {
             log.error("Error sending response: {}", verificationData, e);
-        }
-    }
-
-    private void sendStringMessageToTheTopic(String topic, IsVerificationDto dto) {
-        try {
-            ProducerRecord<String, Object> record = new ProducerRecord<>(topic, dto);
-            kafkaTemplate.send(record);
-            log.info("Record sending: {}", record);
-        } catch (Exception e) {
-            log.error("Error sending response: {}", dto, e);
         }
     }
 }
