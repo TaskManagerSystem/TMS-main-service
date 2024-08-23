@@ -14,8 +14,10 @@ import kafkademo.taskmanagersystem.entity.User;
 import kafkademo.taskmanagersystem.exception.InvalidConstantException;
 import kafkademo.taskmanagersystem.exception.InvalidUserIdsException;
 import kafkademo.taskmanagersystem.exception.UserNotInProjectException;
+import kafkademo.taskmanagersystem.kafka.KafkaProducer;
 import kafkademo.taskmanagersystem.mapper.ProjectMapper;
 import kafkademo.taskmanagersystem.repo.ProjectRepository;
+import kafkademo.taskmanagersystem.service.MessageFormer;
 import kafkademo.taskmanagersystem.service.ProjectService;
 import kafkademo.taskmanagersystem.service.UserService;
 import kafkademo.taskmanagersystem.validation.EnumValidator;
@@ -30,6 +32,8 @@ public class ProjectServiceImpl implements ProjectService {
     private final ProjectRepository projectRepository;
     private final ProjectMapper projectMapper;
     private final UserService userService;
+    private final MessageFormer messageFormer;
+    private final KafkaProducer kafkaProducer;
 
     @Override
     public ProjectDto create(User user, CreateProjectDto createProjectDto) {
@@ -41,11 +45,14 @@ public class ProjectServiceImpl implements ProjectService {
         }
         Project project = projectMapper.toModel(createProjectDto);
         project.setStatus(Project.Status.INITIATED);
-        Set<User> usersInProject = project.getUsers();
+        Set<User> usersInProject = userService.findAllByIdIn(createProjectDto.getUserIds());
         if (!createProjectDto.getUserIds().contains(user.getId())) {
             usersInProject.add(user);
         }
         project.setUsers(usersInProject);
+        usersInProject.stream()
+                .map(member -> messageFormer.formMessageAboutProjectMembership(project, member))
+                .forEach(kafkaProducer::sendNotificationData);
         log.info("Project created with id: {}", project.getId());
         return projectMapper.toDto(projectRepository.save(project));
     }
