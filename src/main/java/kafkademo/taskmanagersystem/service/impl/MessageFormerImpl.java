@@ -13,8 +13,11 @@ public class MessageFormerImpl implements MessageFormer {
     public NotificationData formMessageAboutProjectMembership(Project project, User user) {
         NotificationData notificationData = createAndSetUpRecipient(user);
         notificationData.setMessageSubject("Project membership");
-        notificationData.setMessageText("User: %s, Project: %s".formatted(notificationData.getEmail(), project.getName()));
+        notificationData.setMessageText("User: %s, Project: %s".formatted(
+                notificationData.getEmail(), project.getName())
+        );
         return notificationData;
+        //TODO: finish this method
     }
 
     @Override
@@ -22,6 +25,14 @@ public class MessageFormerImpl implements MessageFormer {
         NotificationData notificationData = createAndSetUpRecipient(user);
         notificationData.setMessageSubject("Project deadline!");
         notificationData.setMessageText("");
+        return notificationData;
+        //TODO: finish this method
+    }
+
+    @Override
+    public NotificationData formMessageAboutTaskAssigning(Task task, User user) {
+        NotificationData notificationData = createAndSetUpRecipient(user);
+        //TODO: finish this method
         return notificationData;
     }
 
@@ -31,6 +42,7 @@ public class MessageFormerImpl implements MessageFormer {
         notificationData.setMessageSubject("Task deadline!");
         notificationData.setMessageText("");
         return notificationData;
+        //TODO: finish this method
     }
 
     private NotificationData createAndSetUpRecipient(User user) {

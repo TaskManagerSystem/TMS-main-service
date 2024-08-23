@@ -1,6 +1,7 @@
 package kafkademo.taskmanagersystem.service.impl;
 
 import jakarta.persistence.EntityNotFoundException;
+import java.time.LocalDate;
 import java.util.List;
 import kafkademo.taskmanagersystem.dto.task.CreateTaskDto;
 import kafkademo.taskmanagersystem.dto.task.TaskDto;
@@ -10,24 +11,30 @@ import kafkademo.taskmanagersystem.entity.Task;
 import kafkademo.taskmanagersystem.entity.User;
 import kafkademo.taskmanagersystem.exception.InvalidConstantException;
 import kafkademo.taskmanagersystem.exception.UserNotInProjectException;
+import kafkademo.taskmanagersystem.kafka.KafkaProducer;
 import kafkademo.taskmanagersystem.mapper.TaskMapper;
 import kafkademo.taskmanagersystem.repo.TaskRepository;
+import kafkademo.taskmanagersystem.service.MessageFormer;
 import kafkademo.taskmanagersystem.service.ProjectService;
 import kafkademo.taskmanagersystem.service.TaskService;
 import kafkademo.taskmanagersystem.service.UserService;
 import kafkademo.taskmanagersystem.validation.EnumValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class TaskServiceImpl implements TaskService {
+    private static final String SCHEDULE = "0 0 9,17 * * *";
     private final TaskRepository taskRepository;
     private final UserService userService;
     private final ProjectService projectService;
     private final TaskMapper taskMapper;
+    private final MessageFormer messageFormer;
+    private final KafkaProducer kafkaProducer;
 
     @Override
     public TaskDto create(User user, CreateTaskDto createTaskDto) {
@@ -46,6 +53,9 @@ public class TaskServiceImpl implements TaskService {
         task.setPriority(priority);
         task.setProject(project);
         task.setUser(assignee);
+        kafkaProducer.sendNotificationData(
+                messageFormer.formMessageAboutTaskAssigning(task, assignee)
+        );
         log.info("Task was created successfully with id: {}", task.getId());
         return taskMapper.toDto(taskRepository.save(task));
     }
@@ -110,5 +120,16 @@ public class TaskServiceImpl implements TaskService {
         Task.Priority priority = getPriorityIfValid(requestPriority);
         task.setStatus(status);
         task.setPriority(priority);
+    }
+
+    @Scheduled(cron = SCHEDULE)
+    private void getAndNotifyOverdueTasks() {
+        LocalDate today = LocalDate.now();
+        List<Task> tasks =
+                taskRepository.findTasksWithDueDateTodayAndNotCompleted(today);
+        tasks.stream()
+                .map(task ->
+                        messageFormer.formMessageAboutTaskDeadline(task, task.getUser()))
+                .forEach(kafkaProducer::sendNotificationData);
     }
 }
