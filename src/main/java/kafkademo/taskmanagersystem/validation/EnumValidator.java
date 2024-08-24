@@ -10,4 +10,7 @@ public class EnumValidator {
                 .filter(e -> e.name().equals(value))
                 .findFirst();
     }
+
+    private EnumValidator() {
+    }
 }
