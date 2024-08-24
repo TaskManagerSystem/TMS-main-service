@@ -10,7 +10,7 @@ public interface MessageFormer {
 
     NotificationData formMessageAboutProjectDeadline(Project project, User user);
 
-    NotificationData formMessageAboutTaskAssigning(Task task, User user);
+    NotificationData formMessageAboutTaskAssigning(String projectName, Task task, User user);
 
-    NotificationData formMessageAboutTaskDeadline(Task task, User user);
+    NotificationData formMessageAboutTaskDeadline(String projectName, Task task, User user);
 }

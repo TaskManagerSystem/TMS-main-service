@@ -11,7 +11,9 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
     List<Task> findAllByProjectId(Long projectId);
 
     @Query("SELECT t FROM Task t "
-            + "JOIN FETCH t.user WHERE t.dueDate = :today "
+            + "JOIN FETCH t.user "
+            + "JOIN FETCH t.project "
+            + "WHERE t.dueDate = :today "
             + "AND t.status != com.example.Project.Status.COMPLETED")
     List<Task> findTasksWithDueDateTodayAndNotCompleted(@Param("today") LocalDate today);
 }

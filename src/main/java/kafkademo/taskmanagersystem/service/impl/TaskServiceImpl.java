@@ -54,7 +54,7 @@ public class TaskServiceImpl implements TaskService {
         task.setProject(project);
         task.setUser(assignee);
         kafkaProducer.sendNotificationData(
-                messageFormer.formMessageAboutTaskAssigning(task, assignee)
+                messageFormer.formMessageAboutTaskAssigning(project.getName(), task, assignee)
         );
         log.info("Task was created successfully with id: {}", task.getId());
         return taskMapper.toDto(taskRepository.save(task));
@@ -129,7 +129,10 @@ public class TaskServiceImpl implements TaskService {
                 taskRepository.findTasksWithDueDateTodayAndNotCompleted(today);
         tasks.stream()
                 .map(task ->
-                        messageFormer.formMessageAboutTaskDeadline(task, task.getUser()))
+                        messageFormer.formMessageAboutTaskDeadline(
+                                task.getProject().getName(),
+                                task,
+                                task.getUser()))
                 .forEach(kafkaProducer::sendNotificationData);
     }
 }
