@@ -11,18 +11,30 @@ import org.springframework.stereotype.Service;
 @Service
 public class MessageFormerImpl implements MessageFormer {
     @Override
-    public NotificationData formMessageAboutProjectMembership(Project project, User user) {
+    public NotificationData formMessageAboutAddingProjectMember(Project project, User user) {
         NotificationData notificationData = createAndSetUpRecipient(user);
         notificationData.setMessageSubject(
-                MessageConstant.PROJECT_MEMBERSHIP_SUBJECT.formatted(project.getName())
+                MessageConstant.PROJECT_ADD_MEMBER_SUBJECT.formatted(project.getName())
         );
-        notificationData.setMessageText(MessageConstant.PROJECT_MEMBERSHIP.formatted(
+        notificationData.setMessageText(MessageConstant.PROJECT_ADD_MEMBER.formatted(
                 project.getName(),
                 project.getName(),
                 project.getDescription(),
                 project.getStartDate(),
                 project.getEndDate(),
                 project.getStatus()
+        ));
+        return notificationData;
+    }
+
+    @Override
+    public NotificationData formMessageAboutRemovingProjectMember(Project project, User user) {
+        NotificationData notificationData = createAndSetUpRecipient(user);
+        notificationData.setMessageSubject(
+                MessageConstant.PROJECT_REMOVE_MEMBER_SUBJECT.formatted(project.getName())
+        );
+        notificationData.setMessageText(MessageConstant.PROJECT_REMOVE_MEMBER.formatted(
+                project.getName()
         ));
         return notificationData;
     }
@@ -67,6 +79,7 @@ public class MessageFormerImpl implements MessageFormer {
         notificationData.setMessageText(MessageConstant.TASK_DEADLINE.formatted(
                 projectName,
                 task.getName(),
+                task.getDescription(),
                 task.getDueDate(),
                 task.getPriority(),
                 task.getStatus()

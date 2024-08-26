@@ -1,9 +1,9 @@
 package kafkademo.taskmanagersystem.util;
 
 public class MessageConstant {
-    public static final String PROJECT_MEMBERSHIP_SUBJECT =
+    public static final String PROJECT_ADD_MEMBER_SUBJECT =
             "Welcome to the Project '%s'!";
-    public static final String PROJECT_MEMBERSHIP = """
+    public static final String PROJECT_ADD_MEMBER = """
              You have been added to the project '%s'.
             Below are the details of the project:
             
@@ -13,6 +13,10 @@ public class MessageConstant {
                 End Date: %s
                 Status: %s
             """;
+    public static final String PROJECT_REMOVE_MEMBER_SUBJECT =
+            "Project '%s'";
+    public static final String PROJECT_REMOVE_MEMBER =
+            "You have been removed from the project '%s'.";
     public static final String PROJECT_DEADLINE_SUBJECT =
             "Project '%s' Deadline Approaching!";
     public static final String PROJECT_DEADLINE =
@@ -35,6 +39,7 @@ public class MessageConstant {
             assigned to you in the project '%s' deadline is today.
        
                 Task Name: %s
+                Description: %s
                 Due Date: %s
                 Priority: %s
                 Status: %s

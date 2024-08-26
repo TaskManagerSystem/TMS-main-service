@@ -6,7 +6,9 @@ import kafkademo.taskmanagersystem.entity.Task;
 import kafkademo.taskmanagersystem.entity.User;
 
 public interface MessageFormer {
-    NotificationData formMessageAboutProjectMembership(Project project, User user);
+    NotificationData formMessageAboutAddingProjectMember(Project project, User user);
+
+    NotificationData formMessageAboutRemovingProjectMember(Project project, User user);
 
     NotificationData formMessageAboutProjectDeadline(Project project, User user);
 

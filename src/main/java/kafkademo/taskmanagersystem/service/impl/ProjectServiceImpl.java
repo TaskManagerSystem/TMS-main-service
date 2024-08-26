@@ -55,7 +55,7 @@ public class ProjectServiceImpl implements ProjectService {
         }
         project.setUsers(usersInProject);
         usersInProject.stream()
-                .map(member -> messageFormer.formMessageAboutProjectMembership(project, member))
+                .map(member -> messageFormer.formMessageAboutAddingProjectMember(project, member))
                 .forEach(kafkaProducer::sendNotificationData);
         log.info("Project created with id: {}", project.getId());
         return projectMapper.toDto(projectRepository.save(project));
@@ -116,7 +116,7 @@ public class ProjectServiceImpl implements ProjectService {
         Set<User> usersForAdding = userService.findAllByIdIn(updateDto.getMemberIds());
         usersForAdding.removeAll(project.getUsers());
         usersForAdding.stream()
-                .map(member -> messageFormer.formMessageAboutProjectMembership(project, member))
+                .map(member -> messageFormer.formMessageAboutAddingProjectMember(project, member))
                 .forEach(kafkaProducer::sendNotificationData);
         project.getUsers().addAll(usersForAdding);
         log.info("Members added to project: {}. Updated user list: {}",
@@ -128,7 +128,6 @@ public class ProjectServiceImpl implements ProjectService {
     public ProjectDto deleteMembers(User user, Long projectId, ProjectMembersUpdateDto updateDto) {
         log.info("Deleting members from project with id: {}. Member IDs: {}",
                 projectId, updateDto.getMemberIds());
-
         Project project = getProjectById(user, projectId);
         Set<Long> invalidUserIds = getInvalidUserIds(updateDto.getMemberIds());
         if (!invalidUserIds.isEmpty()) {
@@ -138,7 +137,9 @@ public class ProjectServiceImpl implements ProjectService {
         }
         Set<User> usersForRemoving = userService.findAllByIdIn(updateDto.getMemberIds());
         usersForRemoving.remove(user);
-        //TODO: add notification about removing user from project
+        usersForRemoving.stream().map(member ->
+                messageFormer.formMessageAboutRemovingProjectMember(project, member))
+                        .forEach(kafkaProducer::sendNotificationData);
         project.getUsers().removeAll(usersForRemoving);
         log.info("Members removed from project: {}. Updated user list: {}",
                 projectId, project.getUsers());
