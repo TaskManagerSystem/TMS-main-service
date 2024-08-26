@@ -96,23 +96,56 @@ pushed to version control.
 1. **Registration**: Users can register on the platform by providing their email, first name, last name, and password.
     - [Registers a new user - demo.](https://drive.google.com/file/d/1V78I2bf0_0jdg136h_TWa6mlFnaiI3Cm/view?usp=sharing)
     ```bash
-   POST: /auth/register
+   POST: api/auth/register
    ``` 
 
 2. **Authentication**: Secure login functionality using JWT tokens to manage sessions.Users can log in using their credentials (email and password).
     - [Sign in for existing user - demo.](https://drive.google.com/file/d/1Dwyg90Y1mwMzB_VOF0zFdXJDFy4wr7dF/view?usp=drive_link)
    ```bash
-   POST: /auth/login
+   POST: api/auth/login
    ```
 
-3. **User Profiles**: Users can view and updated their profile information.
+3. **User Profiles**: Users can view and updated their pro
+file information.
     - [View profile - demo](https://drive.google.com/file/d/1o0v-JUnE_YOnaHM8NhMZgkzYLas2J4yc/view?usp=drive_link)
    ```bash
-   GET: /user/me
+   GET: api/user/me
    ```
     - [Update profile - demo](https://drive.google.com/file/d/1m8lhnajRDTp_ADoLdreP7jswQwkZcwC9/view?usp=drive_link)
    ```bash
-   PUT: /users/me
+   PUT: api/users/me
    ```
 4. **Role Management**: Admins can assign roles (ADMIN or USER) to users,
 controlling access to certain features.
+### Project Controller:
+1. **Create a new project**: Admin can create a new project.
+   - [Create project - demo](https://drive.google.com/file/d/1fN2DhyKExDO2KhIt4uXxhIbXjyWCBHDL/view?usp=sharing)
+   ```bash
+    POST: /api/projects
+   ```
+2. **Find project**: Authorized user can find project by specific Id:
+   - [Find project - demo](https://drive.google.com/file/d/1u2MwWuAlH3DgS5cKRXgj6FI9bv-uvYYO/view?usp=sharing)
+   ```bash
+   GET: /api/projects/{projectId}
+   ```
+3. **Find projects for user**: Admin can find all his projects
+   - [Find projects for user - demo](https://drive.google.com/file/d/1B6DEVsFpq532Hk2ME2TBiCdUb07ePFMx/view?usp=sharing)
+   ```bash
+   GET: /api/projects
+   ```
+4. **Add members to project**: Admin can add new users to project   
+   - [Add members - demo](https://drive.google.com/file/d/1Vsk4mXxnSVDt-3JSP-w5UhWHBKHqs2a2/view?usp=sharing)
+   ```bash
+   PUT: api/projects/{projectId}/members
+   ```
+5. **Delete members**: Admin can delete members
+   - [Delete members-demo](https://drive.google.com/file/d/106PKQWpZooD1lZcuSiwc3HScFN41JWcL/view?usp=sharing)
+   ```bash
+   DELETE: /api/projects/{projectId}/members
+   ```
+6. **Find projects for authorized user**: Return list of projects for user
+   - [Find user's projects](https://drive.google.com/file/d/1a2x3CeLy55u8Oy9R5eGMNjv4lKUjI64a/view?usp=sharing)
+   ```bash
+   GET: api/projects/
+   ```
+7. 
