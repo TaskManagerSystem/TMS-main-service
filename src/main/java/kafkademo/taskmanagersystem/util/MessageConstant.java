@@ -4,8 +4,7 @@ public class MessageConstant {
     public static final String PROJECT_ADD_MEMBER_SUBJECT =
             "Welcome to the Project '%s'!";
     public static final String PROJECT_ADD_MEMBER = """
-             You have been added to the project '%s'.
-            Below are the details of the project:
+             You have been added to the project '%s'. Below are the details of the project:
             
                 Project Name: %s
                 Description: %s
