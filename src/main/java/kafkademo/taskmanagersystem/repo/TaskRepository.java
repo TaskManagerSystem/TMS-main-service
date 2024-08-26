@@ -14,6 +14,6 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
             + "JOIN FETCH t.user "
             + "JOIN FETCH t.project "
             + "WHERE t.dueDate = :today "
-            + "AND t.status != com.example.Project.Status.COMPLETED")
+            + "AND t.status != COMPLETED")
     List<Task> findTasksWithDueDateTodayAndNotCompleted(@Param("today") LocalDate today);
 }

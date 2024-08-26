@@ -1,8 +1,10 @@
 package kafkademo.taskmanagersystem.service.impl;
 
 import jakarta.persistence.EntityNotFoundException;
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 import kafkademo.taskmanagersystem.dto.project.CreateProjectDto;
@@ -23,12 +25,14 @@ import kafkademo.taskmanagersystem.service.UserService;
 import kafkademo.taskmanagersystem.validation.EnumValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class ProjectServiceImpl implements ProjectService {
+    private static final String SCHEDULE = "0 0 9,17 * * *";
     private final ProjectRepository projectRepository;
     private final ProjectMapper projectMapper;
     private final UserService userService;
@@ -109,10 +113,11 @@ public class ProjectServiceImpl implements ProjectService {
             log.error(message);
             throw new InvalidUserIdsException(message);
         }
-        Set<User> usersForAdding = updateDto.getMemberIds()
-                .stream()
-                .map(User::new)
-                .collect(Collectors.toSet());
+        Set<User> usersForAdding = userService.findAllByIdIn(updateDto.getMemberIds());
+        usersForAdding.removeAll(project.getUsers());
+        usersForAdding.stream()
+                .map(member -> messageFormer.formMessageAboutProjectMembership(project, member))
+                .forEach(kafkaProducer::sendNotificationData);
         project.getUsers().addAll(usersForAdding);
         log.info("Members added to project: {}. Updated user list: {}",
                 projectId, project.getUsers());
@@ -133,6 +138,7 @@ public class ProjectServiceImpl implements ProjectService {
         }
         Set<User> usersForRemoving = userService.findAllByIdIn(updateDto.getMemberIds());
         usersForRemoving.remove(user);
+        //TODO: add notification about removing user from project
         project.getUsers().removeAll(usersForRemoving);
         log.info("Members removed from project: {}. Updated user list: {}",
                 projectId, project.getUsers());
@@ -154,7 +160,6 @@ public class ProjectServiceImpl implements ProjectService {
         if (project.getUsers().stream().noneMatch(u -> u.getId().equals(user.getId()))) {
             String message = "Access to project with id " + project.getId() + " is forbidden.";
             log.error(message);
-
             throw new UserNotInProjectException(message);
         }
     }
@@ -168,5 +173,19 @@ public class ProjectServiceImpl implements ProjectService {
             }
         });
         return invalidUserIds;
+    }
+
+    @Scheduled(cron = SCHEDULE)
+    private void getAndNotifyOverdueProjects() {
+        LocalDate today = LocalDate.now();
+        List<Project> projects =
+                projectRepository.findProjectsWithDueDateTodayAndNotCompleted(today);
+        Map<Project, Set<User>> map = projects.stream().collect(Collectors.toMap(
+                project -> project,
+                Project::getUsers
+        ));
+        map.forEach((project, users) -> users.stream().map(user ->
+                messageFormer.formMessageAboutProjectDeadline(project, user))
+                .forEach(kafkaProducer::sendNotificationData));
     }
 }

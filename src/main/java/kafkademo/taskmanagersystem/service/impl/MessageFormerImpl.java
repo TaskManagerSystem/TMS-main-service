@@ -44,7 +44,9 @@ public class MessageFormerImpl implements MessageFormer {
     }
 
     @Override
-    public NotificationData formMessageAboutTaskAssigning(String projectName, Task task, User user) {
+    public NotificationData formMessageAboutTaskAssigning(String projectName,
+                                                          Task task,
+                                                          User user) {
         NotificationData notificationData = createAndSetUpRecipient(user);
         notificationData.setMessageSubject(MessageConstant.TASK_ASSIGNING_SUBJECT);
         notificationData.setMessageText(MessageConstant.TASK_ASSIGNING.formatted(

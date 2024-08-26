@@ -40,7 +40,6 @@ public class MessageConstant {
                 Status: %s
             """;
 
-
     private MessageConstant() {
     }
 }
