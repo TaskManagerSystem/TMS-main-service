@@ -148,4 +148,4 @@ controlling access to certain features.
    ```bash
    GET: api/projects/
    ```
-7. 
+   
