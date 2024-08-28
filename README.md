@@ -31,7 +31,7 @@ email/Telegram for notifications.
    - Sending notifications to users about task deadlines, new comments, and other relevant updates 
    - Integrating with external communication channels like email and Telegram
 
-## Technologies and 
+## Technologies and Tools
 This project utilizes a variety of technologies and tools to ensure
 a robust, scalable, and maintainable car sharing service.
 Below is an overview of the main technologies and tools used:
