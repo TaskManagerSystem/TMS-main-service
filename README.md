@@ -148,4 +148,92 @@ controlling access to certain features.
    ```bash
    GET: api/projects/
    ```
-   
+### Task Controller 
+1. **Create a new task**: User with role Admin can create a new task for project
+   - [Create a task - demo](https://drive.google.com/file/d/1GAz5y5RpdHz5ID9HzS2zzieM9neF9PEH/view?usp=sharing)
+   ```bash
+   POST: api/tasks
+   ```
+2. **Get task by id**: Authorized user can find task by specific id
+   - [Get task By id - demo](https://drive.google.com/file/d/1ZgjGu4r5103gvU-u_r1yoga_0jfj9YJa/view?usp=sharing)
+   ```bash
+   GET: api/tasks/{id}
+   ```
+3. **Delete task by id**: User with role Admin can delete tasks
+   - [Delete task - demo](https://drive.google.com/file/d/1JESYe-N8s0a5Pj4M19s7uQ6IqiaCnY0C/view?usp=sharing)
+   ```bash
+   DELETE: api/tasks/id
+   ```
+4. **Update task by id**: User with role Admin can update tasks
+   - [Update task by id](https://drive.google.com/file/d/1WRCN52Yc_pDNyIz48npGWs-nDWMCmJjt/view?usp=sharing)
+   ```bash
+   PUT: api/tasks/id
+   ```
+### Comment Controller
+1. **Add comment to task**: User can add comments to task
+   - [Add comment - demo](https://drive.google.com/file/d/1YIvoQ9HfWzfODd_xSAec8RZzYzaG46Kr/view?usp=sharing)
+   ```bash
+   POST: api/comments
+   ```
+2. **Return all comments**: User can look at all his comments by task id
+   ```bash
+   GET: api/comments
+   ```
+### Label Controller
+1. **Create a new label**: User can create new label
+   - [Create new label - demo](https://drive.google.com/file/d/1nNO2M6DQktxMAPUJR-QPU2fZ0kuOo41E/view?usp=sharing)
+   ```bash
+   POST: api/labels
+   ```
+2. **Update label**: User can update labels
+   - [Update label - demo](https://drive.google.com/file/d/1A_Ss7gM4FdaYXZXrc7xZb3f06a6Dvjps/view?usp=sharing)
+   ```bash
+   PUT: api/labels/{id}
+   ```
+3. **Get All labels**: User gets list of labels
+   - [Get all labels - demo](https://drive.google.com/file/d/126qptQU26Gqmy-xAGHPpasUG0M8bAyt7/view?usp=sharing)
+   ```bash
+   GET: api/labels
+   ```
+4. **Delete label**: User can delete label by id
+   - [Delete label - demo](https://drive.google.com/file/d/11a-EPb2WcqQ43dUCOAvEb491S4W4cvHh/view?usp=sharing)
+   ```bash
+   DELETE: api/labels/{id}
+   ```
+
+### [Install instruction](https://github.com/TaskManagerSystem/TMS-docker-compose)
+
+### Challenges and Solutions
+1. **Microservices Architecture**:
+
+   **Challenges**: Transitioning to a microservices architecture was one of the most significant challenges.
+    Splitting the application into independent services—such as task management,
+    notification handling, and others—introduced complexity in ensuring these services could
+    effectively communicate and remain cohesive as a single system. Managing data consistency 
+    across distributed databases, handling potential network failures, and maintaining system
+    integrity while allowing for independent service scaling were all challenges that had to
+    be addressed.
+
+   **Solutions**: To overcome the challenges of microservices architecture, we implemented
+    Kafka for reliable event streaming and asynchronous communication between services. This
+    approach allowed us to decouple the components while maintaining system integrity, ensuring 
+    that the services could effectively communicate and scale independently.
+
+
+2. **Telegram Notification System**:
+    
+    **Challenges**:  Implementing a notification system that sends messages via 
+    Telegram according to task deadlines was challenging due to the need for timely and 
+    reliable delivery of messages. This required accommodating various scenarios such as 
+    overdue tasks, upcoming deadlines, or task updates, while ensuring the system remained
+    responsive and accurate.
+
+    **Solution**: To ensure timely and reliable delivery of notifications via Telegram, we
+    developed a dedicated notification service. This service listens to Kafka topics 
+    for deadline-related events, constructs detailed messages, and sends them to users on 
+    Telegram. This solution keeps users informed about their tasks, helping them stay on track
+    and engaged with the system.
+
+## Authors:
+- [Oleksandr Farion](https://github.com/ReamFOX)
+- [Dmytro Hadiuchko](https://github.com/DmytroHadiuchko)
