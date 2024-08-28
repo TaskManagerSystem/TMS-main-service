@@ -112,7 +112,7 @@ public class TaskServiceImpl implements TaskService {
 
     private void validateAndSetEnums(Task task, String requestStatus, String requestPriority) {
         Project.Status status =
-                EnumValidator.findConstantIfValid(Project.Status.class, requestPriority)
+                EnumValidator.findConstantIfValid(Project.Status.class, requestStatus)
                         .orElseThrow(() -> {
                             String message = "Status " + requestStatus + " doesn't exist";
                             return new InvalidConstantException(message);
