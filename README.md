@@ -8,6 +8,7 @@ microservices, each responsible for a specific domain of
 the application. The system is scalable, secure, and integrates
 with third-party services like Dropbox for attachment storage and
 email/Telegram for notifications.
+
 ---
 ## Microservices Overview:
 
