@@ -8,7 +8,7 @@ microservices, each responsible for a specific domain of
 the application. The system is scalable, secure, and integrates
 with third-party services like Dropbox for attachment storage and
 email/Telegram for notifications.
-
+---
 ## Microservices Overview:
 
 1. **Main Service**:
@@ -43,7 +43,7 @@ used to forward data through Kafka.
       *Responsibilities*:
       - This service stores and manages Docker Compose configurations to
       automate the deployment of services. 
-     
+---     
 ## Technologies and Tools
 This project utilizes a variety of technologies and tools to ensure
 a robust, scalable, and maintainable car sharing service.
@@ -103,7 +103,7 @@ monitoring, metrics, and health checks.
 - **dotenv (.env)**: A module that loads environment variables from a '.env'
 file into the application, ensuring sensitive information is kept secure and not
 pushed to version control.
-
+---
 ## Feature and functionality:
 ### User management:
 1. **Registration**: Users can register on the platform by providing their email, first name, last name, and password.
@@ -213,9 +213,10 @@ controlling access to certain features.
    ```bash
    DELETE: /api/labels/{id}
    ```
-
+---
 ### [Install instruction](https://github.com/TaskManagerSystem/TMS-docker-compose)
 
+---
 ### Challenges and Solutions
 1. **Microservices Architecture**:
 
@@ -246,7 +247,7 @@ controlling access to certain features.
     for deadline-related events, constructs detailed messages, and sends them to users on 
     Telegram. This solution keeps users informed about their tasks, helping them stay on track
     and engaged with the system.
-
+---
 ## Authors:
 - [Oleksandr Farion](https://github.com/ReamFOX)
 - [Dmytro Hadiuchko](https://github.com/DmytroHadiuchko)
