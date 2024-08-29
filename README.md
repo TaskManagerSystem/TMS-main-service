@@ -19,18 +19,31 @@ email/Telegram for notifications.
    - Task management (CRUD operations, assignment, status tracking)
    - Comment management (adding, viewing, deleting comments on tasks)
    - Label management (creating, modifying, deleting labels and assigning them to tasks)
-2. **[Attachment Service](https://github.com/TaskManagerSystem/TMS-attachment-service)**:
+2. **[TMS-attachment Service](https://github.com/TaskManagerSystem/TMS-attachment-service)**:
 
    &nbsp;&nbsp;&nbsp;&nbsp;*Responsibilities*:
    - Managing file attachments for tasks 
    - Storing files on Dropbox and saving metadata in the database 
    - Retrieving and deleting attachments
-3. **[Notification Service](https://github.com/TaskManagerSystem/TMS-notification-service)**:
+3. **[TMS-notification Service](https://github.com/TaskManagerSystem/TMS-notification-service)**:
 
    &nbsp;&nbsp;&nbsp;&nbsp;*Responsibilities*:
    - Sending notifications to users about task deadlines, new comments, and other relevant updates 
    - Integrating with external communication channels like email and Telegram
 
+### Auxiliary repositories:
+   1. **[TMS-common-dto](https://github.com/TaskManagerSystem/TMS-common-dto)**
+    
+      *Responsibilities*:
+      - This service is responsible for saving DTO (Data Transfer Object) objects, which are 
+used to forward data through Kafka.
+
+   2. **[TMS-docker-compose](https://github.com/TaskManagerSystem/TMS-docker-compose)**
+   
+      *Responsibilities*:
+      - This service stores and manages Docker Compose configurations to
+      automate the deployment of services. 
+     
 ## Technologies and Tools
 This project utilizes a variety of technologies and tools to ensure
 a robust, scalable, and maintainable car sharing service.
@@ -96,24 +109,24 @@ pushed to version control.
 1. **Registration**: Users can register on the platform by providing their email, first name, last name, and password.
     - [Registers a new user - demo.](https://drive.google.com/file/d/1V78I2bf0_0jdg136h_TWa6mlFnaiI3Cm/view?usp=sharing)
     ```bash
-   POST: api/auth/register
+   POST: /api/auth/register
    ``` 
 
 2. **Authentication**: Secure login functionality using JWT tokens to manage sessions.Users can log in using their credentials (email and password).
     - [Sign in for existing user - demo.](https://drive.google.com/file/d/1Dwyg90Y1mwMzB_VOF0zFdXJDFy4wr7dF/view?usp=drive_link)
    ```bash
-   POST: api/auth/login
+   POST: /api/auth/login
    ```
 
 3. **User Profiles**: Users can view and updated their pro
 file information.
     - [View profile - demo](https://drive.google.com/file/d/1o0v-JUnE_YOnaHM8NhMZgkzYLas2J4yc/view?usp=drive_link)
    ```bash
-   GET: api/user/me
+   GET: /api/user/me
    ```
     - [Update profile - demo](https://drive.google.com/file/d/1m8lhnajRDTp_ADoLdreP7jswQwkZcwC9/view?usp=drive_link)
    ```bash
-   PUT: api/users/me
+   PUT: /api/users/me
    ```
 4. **Role Management**: Admins can assign roles (ADMIN or USER) to users,
 controlling access to certain features.
@@ -136,7 +149,7 @@ controlling access to certain features.
 4. **Add members to project**: Admin can add new users to project   
    - [Add members - demo](https://drive.google.com/file/d/1Vsk4mXxnSVDt-3JSP-w5UhWHBKHqs2a2/view?usp=sharing)
    ```bash
-   PUT: api/projects/{projectId}/members
+   PUT: /api/projects/{projectId}/members
    ```
 5. **Delete members**: Admin can delete members
    - [Delete members-demo](https://drive.google.com/file/d/106PKQWpZooD1lZcuSiwc3HScFN41JWcL/view?usp=sharing)
@@ -146,59 +159,59 @@ controlling access to certain features.
 6. **Find projects for authorized user**: Return list of projects for user
    - [Find user's projects](https://drive.google.com/file/d/1a2x3CeLy55u8Oy9R5eGMNjv4lKUjI64a/view?usp=sharing)
    ```bash
-   GET: api/projects/
+   GET: /api/projects/
    ```
 ### Task Controller 
 1. **Create a new task**: User with role Admin can create a new task for project
    - [Create a task - demo](https://drive.google.com/file/d/1GAz5y5RpdHz5ID9HzS2zzieM9neF9PEH/view?usp=sharing)
    ```bash
-   POST: api/tasks
+   POST: /api/tasks
    ```
 2. **Get task by id**: Authorized user can find task by specific id
    - [Get task By id - demo](https://drive.google.com/file/d/1ZgjGu4r5103gvU-u_r1yoga_0jfj9YJa/view?usp=sharing)
    ```bash
-   GET: api/tasks/{id}
+   GET: /api/tasks/{id}
    ```
 3. **Delete task by id**: User with role Admin can delete tasks
    - [Delete task - demo](https://drive.google.com/file/d/1JESYe-N8s0a5Pj4M19s7uQ6IqiaCnY0C/view?usp=sharing)
    ```bash
-   DELETE: api/tasks/id
+   DELETE: /api/tasks/id
    ```
 4. **Update task by id**: User with role Admin can update tasks
    - [Update task by id](https://drive.google.com/file/d/1WRCN52Yc_pDNyIz48npGWs-nDWMCmJjt/view?usp=sharing)
    ```bash
-   PUT: api/tasks/id
+   PUT: /api/tasks/id
    ```
 ### Comment Controller
 1. **Add comment to task**: User can add comments to task
    - [Add comment - demo](https://drive.google.com/file/d/1YIvoQ9HfWzfODd_xSAec8RZzYzaG46Kr/view?usp=sharing)
    ```bash
-   POST: api/comments
+   POST: /api/comments
    ```
 2. **Return all comments**: User can look at all his comments by task id
    ```bash
-   GET: api/comments
+   GET: /api/comments
    ```
 ### Label Controller
 1. **Create a new label**: User can create new label
    - [Create new label - demo](https://drive.google.com/file/d/1nNO2M6DQktxMAPUJR-QPU2fZ0kuOo41E/view?usp=sharing)
    ```bash
-   POST: api/labels
+   POST: /api/labels
    ```
 2. **Update label**: User can update labels
    - [Update label - demo](https://drive.google.com/file/d/1A_Ss7gM4FdaYXZXrc7xZb3f06a6Dvjps/view?usp=sharing)
    ```bash
-   PUT: api/labels/{id}
+   PUT: /api/labels/{id}
    ```
 3. **Get All labels**: User gets list of labels
    - [Get all labels - demo](https://drive.google.com/file/d/126qptQU26Gqmy-xAGHPpasUG0M8bAyt7/view?usp=sharing)
    ```bash
-   GET: api/labels
+   GET: /api/labels
    ```
 4. **Delete label**: User can delete label by id
    - [Delete label - demo](https://drive.google.com/file/d/11a-EPb2WcqQ43dUCOAvEb491S4W4cvHh/view?usp=sharing)
    ```bash
-   DELETE: api/labels/{id}
+   DELETE: /api/labels/{id}
    ```
 
 ### [Install instruction](https://github.com/TaskManagerSystem/TMS-docker-compose)
